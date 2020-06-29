@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,23 +12,21 @@ public class GameManager : Singleton<GameManager> {
     PAUSED
   }
 
-  public GameObject[] SystemPrefabs;
-  public GameEventHandler GameEvent;
-
-  private List<AsyncOperation> load_operations_;
-  private List<GameObject> instanced_system_prefabs_;
+  private GameEventController game_event_controller_;
+  private List<string> scene_loaded_;
   private GameState current_state_ = GameState.PREGAME;
-  private string _level_name;
+  AudioSource audio_background_player_;
+  AudioSource audio_clip_player_;
 
-  public GameState CurrentGameState {
-    get { return current_state_; }
-    private set { current_state_ = value; }
+  private void Awake() {
+    audio_background_player_ = Instance.gameObject.AddComponent<AudioSource>();
+    audio_clip_player_ = Instance.gameObject.AddComponent<AudioSource>();
   }
 
   void Start() {
-    instanced_system_prefabs_ = new List<GameObject>();
-    load_operations_ = new List<AsyncOperation>();
-    InstantiateSystemPrefabs();
+    scene_loaded_ = new List<string>();
+    game_event_controller_ = GameEventController.Instance;
+    game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
     UpdateState(GameState.PREGAME);
   }
 
@@ -40,13 +39,21 @@ public class GameManager : Singleton<GameManager> {
     }
   }
 
-  void OnLoadOperationComplete(AsyncOperation ao) {
-    if (load_operations_.Contains(ao)) {
-      load_operations_.Remove(ao);
-      if (load_operations_.Count == 0) {
-        UpdateState(GameState.RUNNING);
-      }
+  private void OnGameEventHandler(GameEventArgs gameEvent) {
+    switch(gameEvent.Name) {
+      case EventNames.LOAD_SCENE:
+        LoadScene(((LoadSceneEventArgs)gameEvent).SceneName);
+        break;
     }
+  }
+
+  public GameState CurrentGameState {
+    get { return current_state_; }
+    private set { current_state_ = value; }
+  }
+
+  void OnLoadOperationComplete(AsyncOperation ao) {
+
   }
 
   void OnUnloadOperationComplete(AsyncOperation ao) {
@@ -72,43 +79,31 @@ public class GameManager : Singleton<GameManager> {
       default:
         break;
     }
-    OnGameEvent(new StateChangedEventArgs() { });
+    OnGameEvent(new StateChangedEventArgs((int)previousGameState, (int)current_state_));
   }
 
-  void InstantiateSystemPrefabs() {
-    GameObject prefabInstance;
-    for (int i = 0; i < SystemPrefabs.Length; ++i) {
-      prefabInstance = Instantiate(SystemPrefabs[i]);
-      instanced_system_prefabs_.Add(prefabInstance);
-    }
+  public void LoadScene(string name) {
+    StartCoroutine(LoadSceneAsync(name));
   }
 
-  public void LoadLevel(string levelName) {
+  public IEnumerator LoadSceneAsync(string levelName) {
     AsyncOperation ao = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
     if (ao == null) {
       Debug.LogError("[GameManager] Unable to load level " + levelName);
-      return;
+      yield return null;
     }
-    ao.completed += OnLoadOperationComplete;
-    load_operations_.Add(ao);
-    _level_name = levelName;
+    while (!ao.isDone) {
+      yield return null;
+    }
   }
 
-  public void UnloadLevel(string levelName) {
+  public void UnloadScene(string levelName) {
     AsyncOperation ao = SceneManager.UnloadSceneAsync(levelName);
     ao.completed += OnUnloadOperationComplete;
   }
 
   public void TogglePause() {
     UpdateState(current_state_ == GameState.RUNNING ? GameState.PAUSED : GameState.RUNNING);
-  }
-
-  public void RestartGame() {
-    UpdateState(GameState.PREGAME);
-  }
-
-  public void StartGame() {
-    LoadLevel("Main");
   }
 
   public void QuitGame() {
@@ -120,7 +115,7 @@ public class GameManager : Singleton<GameManager> {
 
   void OnGameEvent(GameEventArgs gameEvent) {
     if (gameEvent != null) {
-      GameEvent.Invoke(gameEvent);
+      game_event_controller_.NotifyEvent(gameEvent);
     }
   }
 }
