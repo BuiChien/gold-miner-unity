@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Startup : GameScript {
-
+public class MainMenu : GameScript {
   void Start() {
 
   }
 
   void Update() {
-  
-  }
-
-  protected override void OnAppEventHanlder(GameEventArgs event_args) {
 
   }
 }

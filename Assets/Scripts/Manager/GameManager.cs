@@ -6,25 +6,33 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager> {
-  public enum GameState {
-    PREGAME,
-    RUNNING,
-    PAUSED
+  #region PublicField
+  public GameState CurrentState {
+    get { return current_state_; }
+    private set { current_state_ = value; }
   }
+  #endregion
 
+  #region PrivateField
   private GameEventController game_event_controller_;
-  private List<string> scene_loaded_;
+  private List<string> scenes_loaded_;
   private GameState current_state_ = GameState.PREGAME;
   AudioSource audio_background_player_;
   AudioSource audio_clip_player_;
+  [SerializeField]
+  private AudioClip background_audio_clip_ = null;
+  [SerializeField]
+  private AudioClip button_click_clip_ = null;
+  #endregion
 
+  #region UnityFuncs
   private void Awake() {
     audio_background_player_ = Instance.gameObject.AddComponent<AudioSource>();
     audio_clip_player_ = Instance.gameObject.AddComponent<AudioSource>();
   }
 
   void Start() {
-    scene_loaded_ = new List<string>();
+    scenes_loaded_ = new List<string>();
     game_event_controller_ = GameEventController.Instance;
     game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
     UpdateState(GameState.PREGAME);
@@ -38,32 +46,71 @@ public class GameManager : Singleton<GameManager> {
       TogglePause();
     }
   }
+  #endregion
 
+  #region ProcessExternalEvent
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
-      case EventNames.LOAD_SCENE:
-        LoadScene(((LoadSceneEventArgs)gameEvent).SceneName);
+      case EventNames.LOAD_SCENE: 
+        LoadScene((LoadSceneEventArgs)gameEvent);
+        break;
+      case EventNames.BUTTON_CLICK:
+        audio_clip_player_.PlayOneShot(button_click_clip_);
+        break;
+      case EventNames.RESTART:
+        UpdateState(GameState.PREGAME);
+        break;
+      case EventNames.RESUME:
+        TogglePause();
+        break;
+      case EventNames.QUIT:
+        QuitGame();
         break;
     }
   }
 
-  public GameState CurrentGameState {
-    get { return current_state_; }
-    private set { current_state_ = value; }
+  private void LoadScene(LoadSceneEventArgs eventArgs) {
+    if (scenes_loaded_.Contains(eventArgs.SceneName)) {
+      return;
+    }
+    if (!eventArgs.IsAdditive) {
+      scenes_loaded_.ForEach(x => {
+        StartCoroutine(UnloadSceneAsync(x));
+      });
+    }
+    StartCoroutine(LoadSceneAsync(eventArgs.SceneName));
   }
 
-  void OnLoadOperationComplete(AsyncOperation ao) {
-
+  private IEnumerator LoadSceneAsync(string sceneName) {
+    AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    if (ao == null) {
+      Debug.LogError("[GameManager] Unable to load level " + sceneName);
+      yield return null;
+    }
+    scenes_loaded_.Add(sceneName);
+    while (!ao.isDone) {
+      yield return null;
+    }
   }
 
-  void OnUnloadOperationComplete(AsyncOperation ao) {
-    // Clean up level is necessary, go back to main menu
+  private IEnumerator UnloadSceneAsync(string sceneName) {
+    AsyncOperation ao = SceneManager.UnloadSceneAsync(sceneName);
+    if (ao == null) {
+      Debug.LogError("[GameManager] Unable to unload level " + sceneName);
+      yield return null;
+    }
+    scenes_loaded_.Remove(sceneName);
+    while (!ao.isDone) {
+      yield return null;
+    }
   }
+  #endregion
 
-  void UpdateState(GameState state) {
+  #region ProcessInternalEvent
+  private void UpdateState(GameState state) {
     GameState previousGameState = current_state_;
     current_state_ = state;
-    switch (CurrentGameState) {
+    switch (CurrentState) {
       case GameState.PREGAME:
         // Initialize any systems that need to be reset
         Time.timeScale = 1.0f;
@@ -82,26 +129,6 @@ public class GameManager : Singleton<GameManager> {
     OnGameEvent(new StateChangedEventArgs((int)previousGameState, (int)current_state_));
   }
 
-  public void LoadScene(string name) {
-    StartCoroutine(LoadSceneAsync(name));
-  }
-
-  public IEnumerator LoadSceneAsync(string levelName) {
-    AsyncOperation ao = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
-    if (ao == null) {
-      Debug.LogError("[GameManager] Unable to load level " + levelName);
-      yield return null;
-    }
-    while (!ao.isDone) {
-      yield return null;
-    }
-  }
-
-  public void UnloadScene(string levelName) {
-    AsyncOperation ao = SceneManager.UnloadSceneAsync(levelName);
-    ao.completed += OnUnloadOperationComplete;
-  }
-
   public void TogglePause() {
     UpdateState(current_state_ == GameState.RUNNING ? GameState.PAUSED : GameState.RUNNING);
   }
@@ -112,7 +139,7 @@ public class GameManager : Singleton<GameManager> {
     Debug.Log("[GameManager] Quit Game.");
     Application.Quit();
   }
-
+  #endregion
   void OnGameEvent(GameEventArgs gameEvent) {
     if (gameEvent != null) {
       game_event_controller_.NotifyEvent(gameEvent);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class GameScript : MonoBehaviour {
   private GameEventController game_event_controller_;
-  protected void Awake() {
+  protected virtual void Awake() {
     game_event_controller_ = GameEventController.Instance;
     game_event_controller_.GameEvent.AddListener(OnAppEventHanlder);
   }
@@ -19,6 +19,8 @@ public abstract class GameScript : MonoBehaviour {
     game_event_controller_.GameEvent.RemoveListener(OnAppEventHanlder);
   }
 
-  protected abstract void OnAppEventHanlder(GameEventArgs event_args);
+  protected virtual void OnAppEventHanlder(GameEventArgs event_args) {
+
+  }
 }
 
