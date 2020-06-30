@@ -20,13 +20,17 @@ public class UiManager : Singleton<UiManager> {
   void Start() {
     game_event_controller_ = GameEventController.Instance;
     game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
+    startup_.GameEvent.AddListener(OnGameEventHandler);
   }
 
   void Update() {
 
   }
   #endregion
-  private void OnGameEventHandler(GameEventArgs arg) {
-
+  private void OnGameEventHandler(GameEventArgs gameEvent) {
+    switch (gameEvent.Name) {
+      case EventNames.BUTTON_CLICK:
+        break;
+    }
   }
 }

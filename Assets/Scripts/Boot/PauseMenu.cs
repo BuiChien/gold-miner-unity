@@ -8,21 +8,22 @@ public class PauseMenu : GameScript {
   public Button QuitButton;
   public Button RestartButton;
 
-  protected override void Awake() {
+  void Awake() {
+    RegisterGameEventController();
     ResumeButton.onClick.AddListener(OnButtonResumeClick);
     QuitButton.onClick.AddListener(OnButtonQuitClick);
     RestartButton.onClick.AddListener(OnButtonRestartClick);
   }
 
   void OnButtonResumeClick() {
-    NotifyEvent(new GameEventArgs(EventNames.RESUME));
+    NotifyEvent(new ButtonEventArgs(EventNames.RESUME));
   }
 
   void OnButtonQuitClick() {
-    NotifyEvent(new GameEventArgs(EventNames.QUIT));
+    NotifyEvent(new ButtonEventArgs(EventNames.QUIT));
   }
 
   void OnButtonRestartClick() {
-    NotifyEvent(new GameEventArgs(EventNames.RESTART));
+    NotifyEvent(new ButtonEventArgs(EventNames.RESTART));
   }
 }
