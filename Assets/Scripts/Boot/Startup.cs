@@ -16,7 +16,7 @@ public class Startup : GameScript {
   void Update() {
     booting_count_in_second_ += UnityEngine.Time.deltaTime * 10;
     if(booting_count_in_second_ > BootingTimeInSecond) {
-      NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN_SCENE));
+      NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
     }
   }
 

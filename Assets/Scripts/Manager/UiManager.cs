@@ -29,7 +29,27 @@ public class UiManager : Singleton<UiManager> {
   #endregion
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch (gameEvent.Name) {
-      case EventNames.BUTTON_CLICK:
+      case EventNames.BUTTON_CLICK: {
+          OnButtonEventHandler((ButtonEventArgs)gameEvent);
+        }
+        break;
+      case EventNames.STARTUP_SUCCESS:
+        main_menu_.gameObject.SetActive(true);
+        break;
+    }
+  }
+
+  private void OnButtonEventHandler(ButtonEventArgs buttonEvent) {
+    switch (buttonEvent.ButtonName) {
+      case EventNames.RESTART: 
+        break;
+      case EventNames.NEWGAME: {
+          main_menu_.gameObject.SetActive(false);
+        }
+        break;
+      case EventNames.CONTINUE: {
+          main_menu_.gameObject.SetActive(false);
+        }
         break;
     }
   }

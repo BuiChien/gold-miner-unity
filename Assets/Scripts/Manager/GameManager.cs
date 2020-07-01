@@ -126,7 +126,7 @@ public class GameManager : Singleton<GameManager> {
       default:
         break;
     }
-    OnGameEvent(new StateChangedEventArgs((int)previousGameState, (int)current_state_));
+    NotifyEvent(new StateChangedEventArgs((int)previousGameState, (int)current_state_));
   }
 
   public void TogglePause() {
@@ -140,7 +140,7 @@ public class GameManager : Singleton<GameManager> {
     Application.Quit();
   }
   #endregion
-  void OnGameEvent(GameEventArgs gameEvent) {
+  void NotifyEvent(GameEventArgs gameEvent) {
     if (gameEvent != null) {
       game_event_controller_.NotifyEvent(gameEvent);
     }
