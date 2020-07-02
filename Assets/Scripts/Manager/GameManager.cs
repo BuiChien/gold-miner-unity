@@ -51,8 +51,9 @@ public class GameManager : Singleton<GameManager> {
   #region ProcessExternalEvent
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
-      case EventNames.LOAD_SCENE: 
+      case EventNames.LOAD_SCENE:
         LoadScene((LoadSceneEventArgs)gameEvent);
+        UpdateState(GameState.RUNNING);
         break;
       case EventNames.BUTTON_CLICK:
         audio_clip_player_.PlayOneShot(button_click_clip_);

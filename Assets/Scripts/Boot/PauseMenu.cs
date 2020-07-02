@@ -16,14 +16,14 @@ public class PauseMenu : GameScript {
   }
 
   void OnButtonResumeClick() {
-    NotifyEvent(new ButtonEventArgs(EventNames.RESUME));
+    BroadcastEvent(new ButtonEventArgs(EventNames.RESUME));
   }
 
   void OnButtonQuitClick() {
-    NotifyEvent(new ButtonEventArgs(EventNames.QUIT));
+    BroadcastEvent(new ButtonEventArgs(EventNames.QUIT));
   }
 
   void OnButtonRestartClick() {
-    NotifyEvent(new ButtonEventArgs(EventNames.RESTART));
+    BroadcastEvent(new ButtonEventArgs(EventNames.RESTART));
   }
 }

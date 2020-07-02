@@ -26,14 +26,14 @@ public class MainMenu : GameScript {
   }
 
   private void OnButtonQuitClick() {
-
+    BroadcastEvent(new ButtonEventArgs(EventNames.QUIT));
   }
 
   private void OnButtonContineClick() {
-
+    BroadcastEvent(new ButtonEventArgs(EventNames.CONTINUE));
   }
 
   private void OnButtonNewGameClick() {
-
+    BroadcastEvent(new ButtonEventArgs(EventNames.NEWGAME));
   }
 }

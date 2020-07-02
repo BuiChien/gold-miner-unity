@@ -170,6 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f3264b73626034b86c877d693a036d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameEvent:
+    m_PersistentCalls:
+      m_Calls: []
   NewGameButton: {fileID: 1454043855}
   ContineButton: {fileID: 1260738013}
   QuitButton: {fileID: 1855326524}
@@ -498,6 +501,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b163e9fc4d59c54478bcc82bcd344594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameEvent:
+    m_PersistentCalls:
+      m_Calls: []
   BootingTimeInSecond: 20
 --- !u!1 &422207035
 GameObject:
@@ -857,6 +863,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4552aeae5e9514794d0ae2210efbf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameEvent:
+    m_PersistentCalls:
+      m_Calls: []
   ResumeButton: {fileID: 806061432}
   QuitButton: {fileID: 1481536631}
   RestartButton: {fileID: 323881453}
