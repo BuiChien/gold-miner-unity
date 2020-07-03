@@ -68,6 +68,7 @@ public class UiManager : Singleton<UiManager> {
         active_startup_ = false;
         active_main_menu_ = true;
         active_pause_menu_ = false;
+        NotifyEvent(new PlayAudioEventArgs());
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);

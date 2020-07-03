@@ -5,22 +5,17 @@ using UnityEngine;
 public class Startup : GameScript {
 
   [SerializeField]
-  private float BootingTimeInSecond = 20;
-
-  private float booting_count_in_second_ = 0;
-
+  private float BootingTimeInSecond = 2;
+  SettingController setting_controller_;
   void Start() {
-
+    setting_controller_ = SettingController.Instance;
+    StartCoroutine(LoadData());
   }
 
-  void Update() {
-    booting_count_in_second_ += UnityEngine.Time.deltaTime * 10;
-    if(booting_count_in_second_ > BootingTimeInSecond) {
-      NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
-    }
-  }
-
-  protected override void OnAppEventHanlder(GameEventArgs gameEvent) {
-
+  private IEnumerator LoadData() {
+    setting_controller_.Load();
+    yield return new WaitForSeconds(BootingTimeInSecond);
+    NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
+    yield return null;
   }
 }

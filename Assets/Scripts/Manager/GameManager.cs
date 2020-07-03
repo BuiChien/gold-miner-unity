@@ -23,12 +23,15 @@ public class GameManager : Singleton<GameManager> {
   private AudioClip background_audio_clip_ = null;
   [SerializeField]
   private AudioClip button_click_clip_ = null;
+  private SettingController setting_controller_;
   #endregion
 
   #region UnityFuncs
   private void Awake() {
     audio_background_player_ = Instance.gameObject.AddComponent<AudioSource>();
+    audio_background_player_.clip = background_audio_clip_;
     audio_clip_player_ = Instance.gameObject.AddComponent<AudioSource>();
+    setting_controller_ = SettingController.Instance;
   }
 
   void Start() {
@@ -55,8 +58,15 @@ public class GameManager : Singleton<GameManager> {
         LoadScene((LoadSceneEventArgs)gameEvent);
         UpdateState(GameState.RUNNING);
         break;
-      case EventNames.BUTTON_CLICK:
-        audio_clip_player_.PlayOneShot(button_click_clip_);
+      case EventNames.BUTTON_CLICK: {
+        if(setting_controller_.UserSettingsInfo.SoundEnable) {
+            audio_clip_player_.PlayOneShot(button_click_clip_);
+          }
+        }
+        break;
+      case EventNames.PLAY_AUDIO: {
+          PlayAudio((PlayAudioEventArgs)gameEvent);
+        }
         break;
       case EventNames.RESTART:
         UpdateState(GameState.PREGAME);
@@ -67,6 +77,25 @@ public class GameManager : Singleton<GameManager> {
       case EventNames.QUIT:
         QuitGame();
         break;
+    }
+  }
+
+  private void PlayAudio(PlayAudioEventArgs eventArgs) {
+    if(eventArgs.IsDefaultMusic) {
+      if (setting_controller_.UserSettingsInfo.MusicEnable) {
+        audio_background_player_.Play();
+      }
+    } else {
+      if (setting_controller_.UserSettingsInfo.SoundEnable) {
+        if(eventArgs.Clip != null) {
+          if(eventArgs.IsRepeat) {
+            audio_clip_player_.clip = eventArgs.Clip;
+            audio_clip_player_.Play();
+          } else {
+            audio_clip_player_.PlayOneShot(eventArgs.Clip);
+          }
+        }
+      }
     }
   }
 
