@@ -5,15 +5,15 @@ using UnityEngine;
 public class Startup : GameScript {
 
   [SerializeField]
-  private float BootingTimeInSecond = 2;
-  SettingController setting_controller_;
+  private float BootingTimeInSecond = 1;
+  Document document_;
   void Start() {
-    setting_controller_ = SettingController.Instance;
+    document_ = Document.Instance;
     StartCoroutine(LoadData());
   }
 
   private IEnumerator LoadData() {
-    setting_controller_.Load();
+    document_.Init();
     yield return new WaitForSeconds(BootingTimeInSecond);
     NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
     yield return null;

@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserSettings : ISetting {
-  public bool MusicEnable { get; set; } = true;
-  public bool SoundEnable { get; set; } = true;
-
-  public void NullToDefault() {
-
-  }
+[CreateAssetMenu(fileName = "NewUserSettings", menuName = "Scriptable/UserSettings", order = 3)]
+public class UserSettings : ScriptableObject {
+  public bool MusicEnable;
+  public bool SoundEnable;
 }

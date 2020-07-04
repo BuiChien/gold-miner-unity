@@ -3,37 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingController : Singleton<SettingController> {
-  public UserSettings UserSettingsInfo { get; private set; }
-  public OperationData OperationDataInfo { get; private set; }
-
+public class SettingController : MonoBehaviour {
+  public UserSettings UserSettingsInfo { get => user_settings_; }
+  public OperationData OperationDataInfo { get => operation_data_; }
+  [SerializeField]
+  private UserSettings user_settings_;
+  [SerializeField]
+  private OperationData operation_data_;
   public void Load() {
-    UserSettingsInfo = LoadSetting<UserSettings>();
-    OperationDataInfo = LoadSetting<OperationData>();
+    LoadSetting<UserSettings>(user_settings_);
+    LoadSetting<OperationData>(operation_data_);
   }
 
   public void SaveUserSettings() {
-    SaveSetting<UserSettings>(UserSettingsInfo);
+    SaveSetting<UserSettings>(user_settings_);
   }
 
   public void SaveOperationData() {
-    SaveSetting<OperationData>(OperationDataInfo);
+    SaveSetting<OperationData>(operation_data_);
   }
 
-  private T LoadSetting<T>() {
-    T instance = default(T);
+  private void LoadSetting<T>(T instance) {
     string settingData = PlayerPrefs.GetString(typeof(T).Name, string.Empty);
     if(settingData != string.Empty) {
-      instance = JsonUtility.FromJson<T>(settingData);
+      JsonUtility.FromJsonOverwrite(settingData, instance);
     }
-    if(instance == null) {
-      instance = Activator.CreateInstance<T>();
-    }
-    if(instance is ISetting) {
-      ISetting setting = (ISetting)instance;
-      setting.NullToDefault();
-    }
-    return instance;
   }
 
   private void SaveSetting<T>(T instance) {
