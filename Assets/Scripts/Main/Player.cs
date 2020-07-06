@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : GameScript {
   public enum PlayerState {
     IDLE,
     DROP_HOOK,
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
   [SerializeField]
   private Animator animimator_;
   [SerializeField]
-  private GameObject hook_;
+  private Rod rod_;
   void Start() {
     State = PlayerState.IDLE;
   }
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour {
   }
 
   private void PlayerDropHook() {
-
+    rod_.DropHook();
   }
 
   private void PlayerPull() {
