@@ -12,4 +12,8 @@
   public const string CONTINUE              = "Continue";
   public const string NEWGAME               = "NewGame";
   public const string STARTUP_SUCCESS       = "StartupSuccess";
+
+  public const string PLAYER_ATTACH         = "PlayerAttach";
+  public const string HOOK_AREA_TOUCH       = "HookTouch";
+
 }

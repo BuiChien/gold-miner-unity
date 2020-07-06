@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GoodsType {
-
+  GOLD_SMALL,
+  GOLD_MEDIUM,
+  GOLD_HUGE,
+  ROCK_SMALL,
+  ROCK_MEDIUM,
+  ROCK_HUGE,
+  DIAMOND_VIOLET,
+  DIAMOND_PINK,
+  DIAMOND_GREEN,
+  DIAMOND_YELLOW,
+  SKULLCAP,
+  BONE
 }
 
 [CreateAssetMenu(fileName = "NewGoodsStats", menuName = "Scriptable/Goods", order = 2)]
 public class GoodsSo : ScriptableObject {
-  public string Name { get; set; }
-  public GoodsType Type { get; set; }
-  public Material Material { get; set; }
-  public Sprite Icon { get; set; }
-  public Rigidbody SpawnObject { get; set; }
-  public int Score { get; set; }
+  public string Name;
+  public GoodsType Type;
+  public Sprite Icon;
+  public Rigidbody SpawnObject;
+  public int ScoreAmount;
 }
