@@ -55,11 +55,11 @@ public class Player : GameScript {
   }
 
   private void PlayerPull() {
-
+    rod_.PullHook();
   }
 
   private void PlayerPullHeavy() {
-
+    rod_.PullHook();
   }
 
   private void PlayerAngry() {
