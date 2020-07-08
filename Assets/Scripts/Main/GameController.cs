@@ -26,9 +26,7 @@ public class GameController : Singleton<GameController> {
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
       case EventNames.HOOK_AREA_TOUCH: {
-          if (player_.State == Player.PlayerState.IDLE) {
-            player_.State = Player.PlayerState.DROP_HOOK;
-          }
+          player_.DropHook();
         }
         break;
     }

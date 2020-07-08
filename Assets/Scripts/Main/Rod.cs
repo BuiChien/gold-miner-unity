@@ -7,8 +7,9 @@ public class Rod : MonoBehaviour {
   private Hook hook_;
   public float RotationSpeed = 3;
   public float AngleRotationMax = 70;
+  public bool IsIdle { get => hook_.IsIdle; }
   void Start() {
-    hook_.State = Hook.HookState.IDLE;
+
   }
 
   void Update() {
@@ -17,22 +18,16 @@ public class Rod : MonoBehaviour {
   }
 
   void FixedUpdate() {
-    if(hook_.State == Hook.HookState.IDLE) {
+    if(hook_.IsIdle) {
       transform.rotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * RotationSpeed) * AngleRotationMax);
     } 
   }
 
   public void DropHook() {
-    if(hook_.State == Hook.HookState.IDLE) {
-      hook_.CalculateVelocity();
-      hook_.State = Hook.HookState.DROP;
-    }
+    hook_.Drop();
   }
 
   public void PullHook() {
-    if (hook_.State == Hook.HookState.DROP) {
-      hook_.CalculateVelocity();
-      hook_.State = Hook.HookState.DROP;
-    }
+    hook_.Pull();
   }
 }
