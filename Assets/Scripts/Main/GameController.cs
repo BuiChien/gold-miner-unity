@@ -10,6 +10,9 @@ public class GameController : Singleton<GameController> {
   private Player player_;
   [SerializeField]
   private HookArea hook_area_;
+  [SerializeField]
+  private Level level_;
+  private Document document_;
   #endregion
   #region UnityFuncs
   void Start() {
@@ -17,12 +20,19 @@ public class GameController : Singleton<GameController> {
     game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
     hook_area_.GameEvent.AddListener(OnGameEventHandler);
     player_.GameEvent.AddListener(OnGameEventHandler);
+    document_ = Document.Instance;
+    StartCoroutine(LoadLevel());
   }
 
   void Update() {
 
   }
   #endregion
+
+  private IEnumerator LoadLevel() {
+    level_.LoadLevel(document_.Level);
+    yield return null;
+  }
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
       case EventNames.HOOK_AREA_TOUCH: {

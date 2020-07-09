@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e0f1e1936d298b4a80ddf448455465a, type: 3}
   m_Name: GoldHuge
   m_EditorClassIdentifier: 
-  Name: 
   Type: 2
-  Icon: {fileID: 0}
+  Icon: {fileID: -257514625204500761, guid: 7207b6c4046f1eb44ae8eb6db0e9be40, type: 3}
   SpawnObject: {fileID: 0}
   ScoreAmount: 600
