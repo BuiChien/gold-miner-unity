@@ -14,7 +14,7 @@ public class Startup : GameScript {
 
   private IEnumerator LoadData() {
     document_.Init();
-    yield return new WaitForSeconds(BootingTimeInSecond);
+    yield return new WaitForSecondsRealtime(BootingTimeInSecond);
     NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
     yield return null;
   }

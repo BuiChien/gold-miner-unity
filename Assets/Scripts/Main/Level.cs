@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour {
-  [SerializeField]
   private GoodsSpawner good_spawner_;
-  private GridLayout grid_layout_;
 
-  void Start() {
-    gameObject.AddComponent<GridLayout>();
-    grid_layout_ = gameObject.GetComponent<GridLayout>();
+  void Awake() {
+    good_spawner_ = gameObject.GetComponent<GoodsSpawner>();
   }
 
   void Update() {

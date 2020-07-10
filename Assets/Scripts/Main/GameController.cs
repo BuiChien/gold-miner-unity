@@ -15,12 +15,15 @@ public class GameController : Singleton<GameController> {
   private Document document_;
   #endregion
   #region UnityFuncs
-  void Start() {
+  void Awake() {
     game_event_controller_ = GameEventController.Instance;
     game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
     hook_area_.GameEvent.AddListener(OnGameEventHandler);
     player_.GameEvent.AddListener(OnGameEventHandler);
     document_ = Document.Instance;
+  }
+
+  void Start() {
     StartCoroutine(LoadLevel());
   }
 
@@ -30,14 +33,24 @@ public class GameController : Singleton<GameController> {
   #endregion
 
   private IEnumerator LoadLevel() {
-    level_.LoadLevel(document_.Level);
+    level_.LoadLevel(1);
     yield return null;
   }
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
-      case EventNames.HOOK_AREA_TOUCH: {
-          player_.DropHook();
+      case EventNames.HOOK_AREA_TOUCH:
+        player_.DropHook();
+        break;
+      case EventNames.ATTACK: {
+          AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
+          if(attachEvent.Victim.IsHeavy()) {
+            player_.PullHeavy();
+          } else {
+            player_.Pull();
+          }
+          break;
         }
+      default:
         break;
     }
   }

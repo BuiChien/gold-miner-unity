@@ -447,7 +447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f3f925391c8644aa69405f7c55b509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  good_spawner_: {fileID: 724732317}
 --- !u!224 &724732316
 RectTransform:
   m_ObjectHideFlags: 0
@@ -464,8 +463,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.019, y: -1.214}
-  m_SizeDelta: {x: 1066.3845, y: 453.5719}
+  m_AnchoredPosition: {x: 0.019, y: -1.646}
+  m_SizeDelta: {x: 1066.3845, y: 401.71912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &724732317
 MonoBehaviour:
@@ -480,8 +479,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   list_goods_:
-  - {fileID: 0}
-  GoodsSpawned: []
+  - {fileID: 11400000, guid: 6ecc17842f00f8b4091972cfd4bdd263, type: 2}
+  goods_prefab_: {fileID: 5409179638853680890, guid: c395ab80eaeeeb64fba10e1d315d2868,
+    type: 3}
+  list_goods_spawned_: []
 --- !u!1 &778322523
 GameObject:
   m_ObjectHideFlags: 0
