@@ -23,5 +23,6 @@ public class GoodsSo : ScriptableObject {
   public Sprite Icon;
   public Animator GoodsAnimator;
   public float Scale;
+  public bool IsHeavy;
   public int ScoreAmount;
 }

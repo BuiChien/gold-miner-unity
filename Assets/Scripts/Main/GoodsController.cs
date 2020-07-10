@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GoodsController : GameScript, IVictim {
-  public GoodsSo GoodDefinition;
+  public GoodsSo character_;
+  public GoodsSo Character {
+    set {
+      character_ = value;
+      GetComponent<SpriteRenderer>().sprite = value.Icon;
+      transform.localScale = new Vector3(value.Scale, value.Scale, 0);
+    } 
+  }
 
   void Start() {
     RegisterGameEventController();
   }
 
-  // Update is called once per frame
   void Update() {
 
   }
@@ -39,6 +45,6 @@ public class GoodsController : GameScript, IVictim {
   }
 
   public bool IsHeavy() {
-    return false;
+    return character_.IsHeavy;
   }
 }
