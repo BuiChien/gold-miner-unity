@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2
   Icon: {fileID: -257514625204500761, guid: 7207b6c4046f1eb44ae8eb6db0e9be40, type: 3}
-  SpawnObject: {fileID: 0}
+  GoodsAnimator: {fileID: 0}
+  Scale: 1
+  IsHeavy: 0
   ScoreAmount: 600

@@ -3,6 +3,5 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface ISpawner {
-  void Spawn(int level);
-  void Clear();
+  void Spawn(int level, int targetScore);
 }
