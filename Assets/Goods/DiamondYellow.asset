@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DiamondYellow
   m_EditorClassIdentifier: 
   Type: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: -854157385759928050, guid: 7207b6c4046f1eb44ae8eb6db0e9be40, type: 3}
   GoodsAnimator: {fileID: 0}
   Scale: 1
   IsHeavy: 0
