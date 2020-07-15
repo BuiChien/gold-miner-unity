@@ -35,7 +35,9 @@ public class Player : GameScript {
     state_machine_.AddState(PlayerState.PULL, () => {
       rod_.PullHook();
     }, (e) => {
-      //Do nothing
+      if(rod_.IsIdle) {
+        state_machine_.ChangeState(PlayerState.IDLE);
+      }
     });
     state_machine_.AddState(PlayerState.PULL_HEAVY, () => {
       rod_.PullHook();

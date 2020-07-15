@@ -60,7 +60,7 @@ public class Spawner : MonoBehaviour, ISpawner {
     for (int i = 0; i < spawnNumber; i++) {
       indexSpawn = Random.Range(0, precious_goods_list_.Length);
       spawnCharacter = precious_goods_list_[indexSpawn];
-      radius = spawnCharacter.Icon.bounds.extents.magnitude * 1.2f;
+      radius = spawnCharacter.Icon.bounds.extents.magnitude * spawnCharacter.Scale;
       spawnPoint = precious_material_zone_.SpawnPoint(radius);
       if(spawnPoint.Equals(Vector3.zero)) {
         continue;
@@ -80,14 +80,13 @@ public class Spawner : MonoBehaviour, ISpawner {
     while (total_score_ > 0) {
       indexSpawn = Random.Range(0, common_goods_list_.Length);
       spawnCharacter = common_goods_list_[indexSpawn];
-      radius = spawnCharacter.Icon.bounds.extents.magnitude * 1.2f;
+      radius = spawnCharacter.Icon.bounds.extents.magnitude * spawnCharacter.Scale;
       spawnPoint = whole_level_zone_.SpawnPoint(radius);
       if(spawnPoint.Equals(Vector3.zero)) {
         continue;
       }
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
       spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
-      radius = spawnObj.GetComponent<PolygonCollider2D>().bounds.extents.magnitude;
       total_score_ -= spawnCharacter.ScoreAmount;
     }
   }

@@ -67,6 +67,7 @@ public class Hook : MonoBehaviour, IAttacker {
         transform.localPosition = original_position_;
         if(victim_ != null) {
           victim_.Death();
+          victim_ = null;
         }
         state_machine_.ChangeState(HookState.IDLE);
       }
