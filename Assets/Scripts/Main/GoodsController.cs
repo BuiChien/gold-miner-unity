@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class GoodsController : GameScript, IVictim {
   public GoodsSo character_;
+  private PolygonCollider2D collider_;
   public GoodsSo Character {
     set {
       character_ = value;
       GetComponent<SpriteRenderer>().sprite = value.Icon;
       transform.localScale = new Vector3(value.Scale, value.Scale, 0);
+      collider_.SetPath(0, value.Icon.vertices);
     } 
+  }
+
+  void Awake() {
+    collider_ = GetComponent<PolygonCollider2D>();
   }
 
   void Start() {

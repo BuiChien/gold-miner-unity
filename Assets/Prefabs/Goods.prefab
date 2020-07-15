@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5409179638853680894}
   - component: {fileID: 5409179638853680895}
   - component: {fileID: 5409179638853680881}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Goods
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,5 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adfddd0ffef9264ab1cb31e39cb6119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoodDefinition: {fileID: 0}
-  follow_subject_: {fileID: 0}
+  GameEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  character_: {fileID: 0}

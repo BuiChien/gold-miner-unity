@@ -33,7 +33,7 @@ public class GameController : Singleton<GameController> {
   #endregion
 
   private IEnumerator LoadLevel() {
-    level_.LoadLevel(1, 800);
+    level_.LoadLevel(1, 3600);
     yield return null;
   }
   private void OnGameEventHandler(GameEventArgs gameEvent) {

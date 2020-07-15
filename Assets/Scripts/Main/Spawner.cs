@@ -29,6 +29,7 @@ public class Spawner : MonoBehaviour, ISpawner {
     total_score_ = totalScore;
     level_ = level;
     SpawnPreciousZone();
+    SpawnCommonZone();
   }
 
   private void UpdateMaxMin(GoodsSo[] listGoods, ref int max, ref int min) {
@@ -52,13 +53,42 @@ public class Spawner : MonoBehaviour, ISpawner {
     int scoreAmount = Random.Range(precious_min_score_, precious_max_score_);
     int spawnNumber = Random.Range(1, total_score_ / scoreAmount);
     int indexSpawn;
-    GameObject child;
+    GameObject spawnObj;
     Vector3 spawnPoint;
+    GoodsSo spawnCharacter;
+    float radius;
     for (int i = 0; i < spawnNumber; i++) {
-      indexSpawn = Random.Range(0, precious_goods_list_.Length - 1);
-      spawnPoint = precious_material_zone_.SpawnPoint();
-      child = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, transform);
-      child.GetComponent<GoodsController>().Character = precious_goods_list_[indexSpawn];
+      indexSpawn = Random.Range(0, precious_goods_list_.Length);
+      spawnCharacter = precious_goods_list_[indexSpawn];
+      radius = spawnCharacter.Icon.bounds.extents.magnitude * 1.2f;
+      spawnPoint = precious_material_zone_.SpawnPoint(radius);
+      if(spawnPoint.Equals(Vector3.zero)) {
+        continue;
+      }
+      spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, precious_material_zone_.transform);
+      spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      total_score_ -= spawnCharacter.ScoreAmount;
+    }
+  }
+
+  private void SpawnCommonZone() {
+    int indexSpawn;
+    GoodsSo spawnCharacter;
+    float radius;
+    Vector3 spawnPoint;
+    GameObject spawnObj;
+    while (total_score_ > 0) {
+      indexSpawn = Random.Range(0, common_goods_list_.Length);
+      spawnCharacter = common_goods_list_[indexSpawn];
+      radius = spawnCharacter.Icon.bounds.extents.magnitude * 1.2f;
+      spawnPoint = whole_level_zone_.SpawnPoint(radius);
+      if(spawnPoint.Equals(Vector3.zero)) {
+        continue;
+      }
+      spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
+      spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      radius = spawnObj.GetComponent<PolygonCollider2D>().bounds.extents.magnitude;
+      total_score_ -= spawnCharacter.ScoreAmount;
     }
   }
 }
