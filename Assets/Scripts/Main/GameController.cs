@@ -13,21 +13,23 @@ public class GameController : Singleton<GameController> {
   [SerializeField]
   private Level level_;
   [SerializeField]
-  private AudioClip explosive_audio_clip_;
+  private AudioClip bomb_explosive_audio_;
   [SerializeField]
-  private AudioClip low_value_audio_clip_;
+  private AudioClip catch_victim_low_score_audio_;
   [SerializeField]
-  private AudioClip normal_value_audio_clip_;
+  private AudioClip catch_victim_high_score_audio_;
   [SerializeField]
-  private AudioClip high_value_audio_clip_;
+  private AudioClip catch_victim_normal_score_audio_;
   [SerializeField]
-  private AudioClip last_ten_seconds_audio_clip_;
+  private AudioClip timeup_count_audio_;
   [SerializeField]
-  private AudioClip pull_audio_clip_;
+  private AudioClip pulling_audio_;
   [SerializeField]
-  private AudioClip lose_audio_clip_;
+  private AudioClip user_lost_audio_;
   [SerializeField]
-  private AudioClip win_audio_clip_;
+  private AudioClip user_win_audio_;
+  [SerializeField]
+  private StatusPanel status_panel_;
 
   private Document document_;
   private CountdownTimer timer_;
@@ -43,11 +45,17 @@ public class GameController : Singleton<GameController> {
   }
 
   void Start() {
+    document_.Init();
+    timer_.StartTime = document_.TotalTime;
+    status_panel_.Level = document_.Level;
+    status_panel_.TargetScore = document_.TagetScore;
+    status_panel_.Score = 0;
     StartCoroutine(LoadLevel());
   }
 
   void Update() {
-    if(timer_.IsFire) {
+    status_panel_.TimeCounter = (int)timer_.Counter;
+    if (timer_.IsFire) {
       StartCoroutine(FinishLevel());
     }
   }
@@ -56,6 +64,7 @@ public class GameController : Singleton<GameController> {
   private IEnumerator LoadLevel() {
     level_.LoadLevel(1, 3600);
     yield return null;
+    timer_.Restart();
   }
 
   private IEnumerator FinishLevel() {
@@ -65,7 +74,7 @@ public class GameController : Singleton<GameController> {
 
     }
     yield return new WaitForSeconds(1f);
-    NotifyEvent(new LoadSceneEventArgs("Shop"));
+    //NotifyEvent(new LoadSceneEventArgs("Shop"));
   }
 
   private void OnGameEventHandler(GameEventArgs gameEvent) {
@@ -76,7 +85,7 @@ public class GameController : Singleton<GameController> {
       case EventNames.ATTACK: {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
           document_.ScoreAmount = attachEvent.Victim.ScoreAmount;
-          NotifyEvent(new PlayAudioEventArgs(pull_audio_clip_));
+          NotifyEvent(new PlayAudioEventArgs(pulling_audio_));
           if (attachEvent.Victim.IsHeavy) {
             player_.PullHeavy();
           } else {
@@ -86,6 +95,7 @@ public class GameController : Singleton<GameController> {
         }
       case EventNames.PULL_SUCCESS:
         document_.UpdateScore();
+        status_panel_.Score = document_.TotalScore;
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);

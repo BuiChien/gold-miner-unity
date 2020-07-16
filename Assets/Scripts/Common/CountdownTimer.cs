@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CountdownTimer : GameScript {
-  public int StartTime { get; private set; }
+  public float StartTime { get; set; }
   public float Counter { get; private set; }
   public bool IsFire { get => (Counter <= 0) && !pause_; }
   private bool pause_;
@@ -19,7 +19,6 @@ public class CountdownTimer : GameScript {
   }
 
   public void Restart() {
-    Counter = StartTime;
     pause_ = false;
   }
 
@@ -34,6 +33,5 @@ public class CountdownTimer : GameScript {
   public void Stop() {
     pause_ = true;
     Counter = 0f;
-    Time.timeScale = 0;
   }
 }

@@ -4,11 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewOperationData", menuName = "Scriptable/OperationData", order = 3)]
 public class OperationData : ScriptableObject {
-  [System.Serializable]
-  public class LevelDataInfo {
-    public int TargetScore;
-  }
   public int Level;
   public int TotalScore;
-  public LevelDataInfo[] LevelData;
+  public int TargetScore;
 }

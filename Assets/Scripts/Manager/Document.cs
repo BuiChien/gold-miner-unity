@@ -14,12 +14,11 @@ public class Document : Singleton<Document> {
     get => data_context_.Level;
   }
 
-  public int MaxLevel {
-    get => data_context_.LevelData.Length;
-  }
-
   public int TagetScore {
-    get => data_context_.LevelData[Level].TargetScore;
+    get {
+      int target = 800;
+      return target;
+    }
   }
 
   public int TotalScore {
@@ -28,7 +27,6 @@ public class Document : Singleton<Document> {
       data_context_.TotalScore = value;
     }
   }
-  public int Score { get; private set; }
   public int ScoreAmount { get; set; }
   public int TotalTime { get; private set; }
 
@@ -54,19 +52,15 @@ public class Document : Singleton<Document> {
   }
   public void GoNextLevel() {
     data_context_.Level++;
-    if (data_context_.Level > MaxLevel) {
-      data_context_.Level = 1;
-    }
   }
 
   public void NewGame() {
-    Score = 0;
     data_context_.Level = 1;
     TotalTime = 61;
   }
 
   public void UpdateScore() {
-    Score += ScoreAmount;
+    TotalScore += ScoreAmount;
   }
 
   public void SaveData() {
