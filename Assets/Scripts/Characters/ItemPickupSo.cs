@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemPickupType {
-
+  BOMB,
+  BOOK_STONE,
+  CLOCK,
+  POWER
 }
 
 [CreateAssetMenu(fileName ="NewItemPickupStats", menuName = "Scriptable/ItemPickup", order = 1)]

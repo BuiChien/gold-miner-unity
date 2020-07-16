@@ -12,7 +12,25 @@ public class GameController : Singleton<GameController> {
   private HookArea hook_area_;
   [SerializeField]
   private Level level_;
+  [SerializeField]
+  private AudioClip explosive_audio_clip_;
+  [SerializeField]
+  private AudioClip low_value_audio_clip_;
+  [SerializeField]
+  private AudioClip normal_value_audio_clip_;
+  [SerializeField]
+  private AudioClip high_value_audio_clip_;
+  [SerializeField]
+  private AudioClip last_ten_seconds_audio_clip_;
+  [SerializeField]
+  private AudioClip pull_audio_clip_;
+  [SerializeField]
+  private AudioClip lose_audio_clip_;
+  [SerializeField]
+  private AudioClip win_audio_clip_;
+
   private Document document_;
+  private CountdownTimer timer_;
   #endregion
   #region UnityFuncs
   void Awake() {
@@ -21,6 +39,7 @@ public class GameController : Singleton<GameController> {
     hook_area_.GameEvent.AddListener(OnGameEventHandler);
     player_.GameEvent.AddListener(OnGameEventHandler);
     document_ = Document.Instance;
+    timer_ = GetComponent<CountdownTimer>();
   }
 
   void Start() {
@@ -28,7 +47,9 @@ public class GameController : Singleton<GameController> {
   }
 
   void Update() {
-
+    if(timer_.IsFire) {
+      StartCoroutine(FinishLevel());
+    }
   }
   #endregion
 
@@ -36,6 +57,17 @@ public class GameController : Singleton<GameController> {
     level_.LoadLevel(1, 3600);
     yield return null;
   }
+
+  private IEnumerator FinishLevel() {
+    if (document_.IsVictory) {
+
+    } else {
+
+    }
+    yield return new WaitForSeconds(1f);
+    NotifyEvent(new LoadSceneEventArgs("Shop"));
+  }
+
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch(gameEvent.Name) {
       case EventNames.HOOK_AREA_TOUCH:
@@ -43,15 +75,37 @@ public class GameController : Singleton<GameController> {
         break;
       case EventNames.ATTACK: {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
-          if(attachEvent.Victim.IsHeavy()) {
+          document_.ScoreAmount = attachEvent.Victim.ScoreAmount;
+          NotifyEvent(new PlayAudioEventArgs(pull_audio_clip_));
+          if (attachEvent.Victim.IsHeavy) {
             player_.PullHeavy();
           } else {
             player_.Pull();
           }
           break;
         }
+      case EventNames.PULL_SUCCESS:
+        document_.UpdateScore();
+        break;
+      case EventNames.STATE_CHANGED:
+        OnGameStateChanged((StateChangedEventArgs)gameEvent);
+        break;
       default:
         break;
     }
+  }
+  private void OnGameStateChanged(StateChangedEventArgs gameEvent) {
+    switch ((GameState)gameEvent.NextState) {
+      case GameState.PAUSED:
+        timer_.Pause();
+        document_.SaveData();
+        break;
+      default:
+        break;
+    }
+  }
+
+  void NotifyEvent(GameEventArgs gameEvent) {
+    game_event_controller_.NotifyEvent(gameEvent);
   }
 }

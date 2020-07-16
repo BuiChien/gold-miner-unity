@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class GoodsController : GameScript, IVictim {
   public GoodsSo character_;
+  public int ScoreAmount {
+    get => character_.ScoreAmount; 
+  }
+  public bool IsHeavy {
+    get => character_.IsHeavy;
+  }
   private PolygonCollider2D collider_;
   public GoodsSo Character {
     set {
@@ -48,9 +54,5 @@ public class GoodsController : GameScript, IVictim {
     transform.position = new Vector3(target.position.x,
                                         target.position.y - gameObject.GetComponent<Collider2D>().bounds.size.y / 3,
                                         transform.position.z);
-  }
-
-  public bool IsHeavy() {
-    return character_.IsHeavy;
   }
 }

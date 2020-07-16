@@ -22,12 +22,35 @@ public class Document : Singleton<Document> {
     get => data_context_.LevelData[Level].TargetScore;
   }
 
+  public int TotalScore {
+    get => data_context_.TotalScore; 
+    private set {
+      data_context_.TotalScore = value;
+    }
+  }
   public int Score { get; private set; }
+  public int ScoreAmount { get; set; }
+  public int TotalTime { get; private set; }
+
+  public bool IsVictory { get => TotalScore >= TagetScore; }
+
+  public List<ItemPickup> BuyItems {
+    get {
+      List<ItemPickup> buyItems = new List<ItemPickup>();
+      buy_item_list_.ForEach(x => {
+        buyItems.Add(x);
+      });
+      return buyItems;
+    }
+  }
+
+  private List<ItemPickup> buy_item_list_;
   #endregion
 
   public void Init() {
     setting_controller_.Load();
     data_context_ = setting_controller_.OperationDataInfo;
+    buy_item_list_ = new List<ItemPickup>();
   }
   public void GoNextLevel() {
     data_context_.Level++;
@@ -37,6 +60,16 @@ public class Document : Singleton<Document> {
   }
 
   public void NewGame() {
+    Score = 0;
     data_context_.Level = 1;
+    TotalTime = 61;
+  }
+
+  public void UpdateScore() {
+    Score += ScoreAmount;
+  }
+
+  public void SaveData() {
+    setting_controller_.SaveOperationData();
   }
 }

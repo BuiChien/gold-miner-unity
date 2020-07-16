@@ -6,7 +6,7 @@ public class PlayAudioEventArgs : GameEventArgs {
   public AudioClip Clip { get; private set; }
   public bool IsRepeat { get; private set; }
   public bool IsDefaultMusic { get; private set; }
-  public PlayAudioEventArgs(AudioClip clip, bool isRepeat) 
+  public PlayAudioEventArgs(AudioClip clip, bool isRepeat = false) 
     : base(EventNames.PLAY_AUDIO) {
     Clip = clip;
     IsRepeat = isRepeat;

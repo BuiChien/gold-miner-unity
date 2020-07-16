@@ -9,5 +9,6 @@ public class OperationData : ScriptableObject {
     public int TargetScore;
   }
   public int Level;
+  public int TotalScore;
   public LevelDataInfo[] LevelData;
 }
