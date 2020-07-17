@@ -9,14 +9,13 @@ public class Hook : MonoBehaviour, IAttacker {
     public const string DROP = "Drop";
     public const string PULL = "Pull";
   }
-
+  public float Speed { get; set; }
   private IVictim victim_ { get; set; }
   [SerializeField]
   private GameObject hook_;
   [SerializeField]
   private GameObject half_hook_;
   private Vector3 original_position_;
-  private float speed_;
   private Vector2 velocity_;
   [SerializeField]
   public Transform original_coordinates_;
@@ -41,7 +40,7 @@ public class Hook : MonoBehaviour, IAttacker {
 
     state_machine_.AddState(HookState.DROP, () => {
       CalculateVelocity();
-      GetComponent<Rigidbody2D>().velocity = velocity_ * speed_;
+      GetComponent<Rigidbody2D>().velocity = velocity_ * Speed;
     }, (e) => {
       // hook is out of cammera view, move to pull state
       if (IsVisible == false) {
@@ -54,9 +53,9 @@ public class Hook : MonoBehaviour, IAttacker {
       if (IsVisible) {
         hook_.SetActive(false);
         half_hook_.SetActive(true);
-        GetComponent<Rigidbody2D>().velocity = velocity_ * speed_;
+        GetComponent<Rigidbody2D>().velocity = velocity_ * Speed;
       } else {
-        GetComponent<Rigidbody2D>().velocity = velocity_ * speed_ * 3;
+        GetComponent<Rigidbody2D>().velocity = velocity_ * Speed * 3;
       }
     }, (e) => {
       if(victim_ != null) {
@@ -99,7 +98,6 @@ public class Hook : MonoBehaviour, IAttacker {
     velocity_ = new Vector2(transform.position.x - original_coordinates_.position.x,
                        transform.position.y - original_coordinates_.position.y);
     velocity_.Normalize();
-    speed_ = 3;
   }
 
   public void OnAttach(IVictim victim) {

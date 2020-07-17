@@ -8,6 +8,10 @@ public class GoodsController : GameScript, IVictim {
   public int ScoreAmount {
     get => character_.ScoreAmount; 
   }
+
+  public int Id => (int)character_.Type;
+  public string Tag => gameObject.tag;
+
   public bool IsHeavy {
     get => character_.IsHeavy;
   }

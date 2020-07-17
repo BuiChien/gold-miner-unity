@@ -16,4 +16,5 @@
   public const string ATTACK                = "Attach";
   public const string HOOK_AREA_TOUCH       = "HookTouch";
   public const string PULL_SUCCESS          = "PullSuccess";
+  public const string DROP_BOMB             = "DropBomb";
 }

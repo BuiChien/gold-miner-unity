@@ -23,6 +23,7 @@ public class GameManager : Singleton<GameManager> {
   private AudioClip background_audio_clip_ = null;
   [SerializeField]
   private AudioClip button_click_clip_ = null;
+  private AudioClip oneshot_repeat_clip_ = null;
   private Document document_;
   #endregion
 
@@ -47,6 +48,9 @@ public class GameManager : Singleton<GameManager> {
     }
     if (Input.GetKeyUp(KeyCode.Escape)) {
       TogglePause();
+    }
+    if(oneshot_repeat_clip_ != null && !audio_clip_player_.isPlaying) {
+      audio_clip_player_.PlayOneShot(oneshot_repeat_clip_);
     }
   }
   #endregion
@@ -88,12 +92,8 @@ public class GameManager : Singleton<GameManager> {
     } else {
       if (document_.UserSettingsInfo.SoundEnable) {
         if(eventArgs.Clip != null) {
-          if(eventArgs.IsRepeat) {
-            audio_clip_player_.clip = eventArgs.Clip;
-            audio_clip_player_.Play();
-          } else {
-            audio_clip_player_.PlayOneShot(eventArgs.Clip);
-          }
+          oneshot_repeat_clip_ = eventArgs.IsRepeat ? eventArgs.Clip : null;
+          audio_clip_player_.PlayOneShot(eventArgs.Clip);
         }
       }
     }

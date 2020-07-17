@@ -6,7 +6,8 @@ public enum ItemPickupType {
   BOMB,
   BOOK_STONE,
   CLOCK,
-  POWER
+  POWER,
+  DIAMOND
 }
 
 [CreateAssetMenu(fileName ="NewItemPickupStats", menuName = "Scriptable/ItemPickup", order = 1)]

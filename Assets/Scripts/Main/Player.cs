@@ -12,6 +12,11 @@ public class Player : GameScript {
     public const string ANGRY         = "Angry";
     public const string HAPPY         = "Happy";
   }
+  public float HookSpeed {
+    set {
+      rod_.Speed = value;
+    }
+  }
   [SerializeField]
   private Animator animimator_;
   [SerializeField]

@@ -16,4 +16,10 @@ public class Level : MonoBehaviour {
   public void LoadLevel(int level, int targetScore) {
     good_spawner_.Spawn(level, targetScore);
   }
+
+  public bool IsFinish() {
+    bool bRet = false;
+
+    return bRet;
+  }
 }
