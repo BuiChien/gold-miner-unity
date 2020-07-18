@@ -49,9 +49,11 @@ public class GameManager : Singleton<GameManager> {
     if (Input.GetKeyUp(KeyCode.Escape)) {
       TogglePause();
     }
-    if(oneshot_repeat_clip_ != null && !audio_clip_player_.isPlaying) {
-      audio_clip_player_.PlayOneShot(oneshot_repeat_clip_);
-    }
+    AudioRepeat();
+  }
+
+  void FixedUpdate() {
+    AudioRepeat();
   }
   #endregion
 
@@ -137,6 +139,12 @@ public class GameManager : Singleton<GameManager> {
   #endregion
 
   #region ProcessInternalEvent
+  private void AudioRepeat() {
+    if (oneshot_repeat_clip_ != null && !audio_clip_player_.isPlaying) {
+      audio_clip_player_.PlayOneShot(oneshot_repeat_clip_);
+    }
+  }
+
   private void UpdateState(GameState state) {
     GameState previousGameState = current_state_;
     current_state_ = state;

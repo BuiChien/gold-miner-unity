@@ -11,16 +11,18 @@ public enum ScoreAmountType {
 public class Document : Singleton<Document> {
   #region PrivateField
   [SerializeField]
-  private SettingController setting_controller_;
-  OperationData data_context_;
+  private UserSettings user_settings_;
+  [SerializeField]
+  private OperationData operation_data_;
   private const int LOW_SCORE_MARGIN        = 150;
   private const int NORMAL_SCORE_MARGIN     = 400;
   #endregion
 
   #region PublicFields
-  public UserSettings UserSettingsInfo { get => setting_controller_.UserSettingsInfo; }
+  public UserSettings UserSettingsInfo { get => user_settings_; }
+  public OperationData OperationDataInfo { get => operation_data_; }
   public int Level {
-    get => data_context_.Level;
+    get => operation_data_.Level;
   }
 
   public int TagetScore { get; private set; }
@@ -28,17 +30,11 @@ public class Document : Singleton<Document> {
   public int LevelScore { get; private set; }
 
   public int HookSpeed { get; private set; }
-
-  public int TotalScore {
-    get => data_context_.TotalScore; 
-    private set {
-      data_context_.TotalScore = value;
-    }
-  }
+  public int HookHeavySpeed { get => HookSpeed / 2; }
+  public int TotalScore { get; private set; }
   public int ScoreAmount { get; private set; }
   public ScoreAmountType AmountType { get; private set; }
   public int TotalTime { get; private set; }
-
   public bool IsVictory { get => TotalScore >= TagetScore; }
 
   public List<ItemPickup> BuyItems {
@@ -55,13 +51,12 @@ public class Document : Singleton<Document> {
   #endregion
 
   public void Init() {
-    setting_controller_.Load();
-    data_context_ = setting_controller_.OperationDataInfo;
     buy_item_list_ = new List<ItemPickup>();
+    TotalScore = operation_data_.TotalScore;
   }
 
   public void GoNextLevel() {
-    data_context_.Level++;
+    operation_data_.Level++;
     if(BuyItems.FindIndex(x => x.Type == ItemPickupType.CLOCK) >= 0) {
       TotalTime = (int)((Random.Range(0, Level) / Level) * 20) + 70;
     } else {
@@ -78,7 +73,7 @@ public class Document : Singleton<Document> {
   }
 
   public void NewGame() {
-    data_context_.Level = 1;
+    operation_data_.Level = 1;
     TotalTime = 61;
     HookSpeed = 3;
     TagetScore = 800;
@@ -126,6 +121,6 @@ public class Document : Singleton<Document> {
   }
 
   public void SaveData() {
-    setting_controller_.SaveOperationData();
+    operation_data_.TotalScore = TotalScore;
   }
 }

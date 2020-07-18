@@ -5,7 +5,7 @@ using UnityEngine;
 public class Startup : GameScript {
 
   [SerializeField]
-  private float BootingTimeInSecond = 1;
+  private float BootingTimeInSecond = 1f;
   Document document_;
   void Start() {
     document_ = Document.Instance;
@@ -14,7 +14,7 @@ public class Startup : GameScript {
 
   private IEnumerator LoadData() {
     document_.Init();
-    yield return new WaitForSecondsRealtime(BootingTimeInSecond);
+    yield return new WaitForSeconds(BootingTimeInSecond);
     NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
     yield return null;
   }

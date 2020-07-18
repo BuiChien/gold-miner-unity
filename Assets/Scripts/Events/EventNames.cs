@@ -17,4 +17,7 @@
   public const string HOOK_AREA_TOUCH       = "HookTouch";
   public const string PULL_SUCCESS          = "PullSuccess";
   public const string DROP_BOMB             = "DropBomb";
+
+  public const string SHOW_MENU             = "ShowMenu";
+  public const string RETRY_LEVEL           = "RetryLevel";
 }

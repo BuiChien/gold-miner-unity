@@ -3,5 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SceneNames {
-  public const string MAIN_SCENE = "Main";
+  public const string MAIN = "Main";
+  public const string SHOP = "Shop";
 }

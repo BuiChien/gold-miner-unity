@@ -30,6 +30,8 @@ public class GameController : MonoBehaviour {
   private AudioClip user_win_audio_;
   [SerializeField]
   private StatusPanel status_panel_;
+  [SerializeField]
+  private PopupMenu popup_menu_;
 
   private Document document_;
   private CountdownTimer timer_;
@@ -60,25 +62,27 @@ public class GameController : MonoBehaviour {
   void Update() {
     status_panel_.TimeCounter = (int)timer_.Counter;
     if (timer_.IsFire || level_.IsFinish()) {
+      timer_.Stop();
       StartCoroutine(FinishLevel());
     }
   }
 #endregion
 
   private IEnumerator LoadLevel() {
+    popup_menu_.ShowLevelTarget(document_.Level, document_.TagetScore);
     level_.LoadLevel(document_.Level, document_.LevelScore);
-    yield return null;
+    yield return new WaitForSeconds(1f);
     timer_.Restart();
+    popup_menu_.HideLevelTarget();
+    yield return null;
   }
 
   private IEnumerator FinishLevel() {
     if (document_.IsVictory) {
-
-    } else {
-
+      document_.SaveData();
     }
-    yield return new WaitForSeconds(1f);
-    //NotifyEvent(new LoadSceneEventArgs("Shop"));
+    popup_menu_.ShowLevelComplete(document_.IsVictory, document_.TotalScore);
+    yield return null;
   }
 
   private void OnGameEventHandler(GameEventArgs gameEvent) {
@@ -91,6 +95,7 @@ public class GameController : MonoBehaviour {
           document_.SetScoreAmount(attachEvent.Victim);
           NotifyEvent(new PlayAudioEventArgs(pulling_audio_, true));
           if (attachEvent.Victim.IsHeavy) {
+            player_.HookSpeed = document_.HookHeavySpeed;
             player_.PullHeavy();
           } else {
             player_.Pull();
@@ -99,6 +104,7 @@ public class GameController : MonoBehaviour {
         }
       case EventNames.PULL_SUCCESS:
         OnPullSuccess();
+        player_.HookSpeed = document_.HookSpeed;
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);

@@ -9,12 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e0f1e1936d298b4a80ddf448455465a, type: 3}
-  m_Name: GoldHuge
+  m_Script: {fileID: 11500000, guid: 94f3869c440fe484b8bb0e6999d0126b, type: 3}
+  m_Name: Clock
   m_EditorClassIdentifier: 
-  Type: 2
-  Icon: {fileID: -257514625204500761, guid: 7207b6c4046f1eb44ae8eb6db0e9be40, type: 3}
-  GoodsAnimator: {fileID: 0}
-  Scale: 1
-  IsHeavy: 1
-  ScoreAmount: 600
