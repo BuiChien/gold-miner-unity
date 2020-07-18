@@ -12,7 +12,11 @@ public class UiManager : Singleton<UiManager> {
   [SerializeField] 
   private PauseMenu pause_menu_;
   [SerializeField] 
+  private GameObject background_;
+  [SerializeField] 
   private Camera dummy_camera_;
+  [SerializeField]
+  private AudioClip background_audio_clip_ = null;
   private GameEventController game_event_controller_;
   private bool active_camera_ {
     get => dummy_camera_.gameObject.activeSelf;
@@ -68,7 +72,7 @@ public class UiManager : Singleton<UiManager> {
         active_startup_ = false;
         active_main_menu_ = true;
         active_pause_menu_ = false;
-        NotifyEvent(new PlayAudioEventArgs());
+        NotifyEvent(new PlayAudioEventArgs(background_audio_clip_, true, false, true));
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
@@ -95,12 +99,16 @@ public class UiManager : Singleton<UiManager> {
         break;
       case EventNames.NEWGAME: {
           active_main_menu_ = false;
-          NotifyEvent(new LoadSceneEventArgs("Main"));
+          background_.SetActive(false);
+          Document.Instance.NewGame();
+          NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
         }
         break;
       case EventNames.CONTINUE: {
           active_main_menu_ = false;
-          NotifyEvent(new LoadSceneEventArgs("Main"));
+          background_.SetActive(false);
+          Document.Instance.Continue();
+          NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
         }
         break;
     }

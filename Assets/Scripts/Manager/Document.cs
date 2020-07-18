@@ -77,7 +77,15 @@ public class Document : Singleton<Document> {
     TotalTime = 61;
     HookSpeed = 3;
     TagetScore = 800;
+    operation_data_.TotalScore = 0;
     LevelScore = TagetScore + Random.Range(800, 2000);
+  }
+
+  public void Continue() {
+    int oldTargetScore = TagetScore;
+    TotalTime = 61;
+    TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
+    LevelScore = (TagetScore - oldTargetScore) + Random.Range(800, 2000);
   }
 
   public void UpdateScore() {

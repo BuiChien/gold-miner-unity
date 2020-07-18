@@ -9,20 +9,39 @@ public class MainMenu : GameScript {
   public Button ContineButton;
   public Button QuitButton;
   public Button SettingsButton;
+
+  [SerializeField]
+  private SettingPanel setting_panel_;
+
   void Start() {
     RegisterGameEventController();
     NewGameButton.onClick.AddListener(OnButtonNewGameClick);
     ContineButton.onClick.AddListener(OnButtonContineClick);
     QuitButton.onClick.AddListener(OnButtonQuitClick);
     SettingsButton.onClick.AddListener(OnButtonSettingsClick);
+    setting_panel_.GameEvent.AddListener(OnGameEventHandler);
   }
 
   void Update() {
 
   }
 
-  private void OnButtonSettingsClick() {
+  private void OnGameEventHandler(GameEventArgs arg0) {
+    if(arg0.Name == "CloseSetting") {
+      NewGameButton.interactable = true;
+      SettingsButton.interactable = true;
+      QuitButton.interactable = true;
+      ContineButton.interactable = true;
+    }
+  }
 
+  private void OnButtonSettingsClick() {
+    setting_panel_.Visible = true;
+    NewGameButton.interactable = false;
+    SettingsButton.interactable = false;
+    QuitButton.interactable = false;
+    ContineButton.interactable = false;
+    BroadcastEvent(new ButtonEventArgs(""));
   }
 
   private void OnButtonQuitClick() {

@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Startup : GameScript {
-
-  [SerializeField]
-  private float BootingTimeInSecond = 1f;
-  Document document_;
   void Start() {
-    document_ = Document.Instance;
     StartCoroutine(LoadData());
   }
 
   private IEnumerator LoadData() {
-    document_.Init();
-    yield return new WaitForSeconds(BootingTimeInSecond);
+    Document.Instance.Init();
+    yield return new WaitForSeconds(1f);
     NotifyEvent(new GameEventArgs(EventNames.STARTUP_SUCCESS));
     yield return null;
   }

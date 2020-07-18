@@ -47,10 +47,6 @@ public class GameController : MonoBehaviour {
   }
 
   void Start() {
-    document_.Init();
-#if DEBUG
-    document_.NewGame();
-#endif
     timer_.StartTime = document_.TotalTime;
     status_panel_.Level = document_.Level;
     status_panel_.TargetScore = document_.TagetScore;

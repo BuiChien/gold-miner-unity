@@ -20,8 +20,6 @@ public class GameManager : Singleton<GameManager> {
   AudioSource audio_background_player_;
   AudioSource audio_clip_player_;
   [SerializeField]
-  private AudioClip background_audio_clip_ = null;
-  [SerializeField]
   private AudioClip button_click_clip_ = null;
   private AudioClip oneshot_repeat_clip_ = null;
   private Document document_;
@@ -30,7 +28,6 @@ public class GameManager : Singleton<GameManager> {
   #region UnityFuncs
   private void Awake() {
     audio_background_player_ = Instance.gameObject.AddComponent<AudioSource>();
-    audio_background_player_.clip = background_audio_clip_;
     audio_clip_player_ = Instance.gameObject.AddComponent<AudioSource>();
     document_ = Document.Instance;
   }
@@ -89,7 +86,20 @@ public class GameManager : Singleton<GameManager> {
   private void PlayAudio(PlayAudioEventArgs eventArgs) {
     if(eventArgs.IsDefaultMusic) {
       if (document_.UserSettingsInfo.MusicEnable) {
-        audio_background_player_.Play();
+        if(eventArgs.Clip != null && !eventArgs.IsStop) {
+          audio_background_player_.clip = eventArgs.Clip;
+          audio_background_player_.PlayOneShot(eventArgs.Clip);
+        } else if(eventArgs.IsStop) {
+          audio_background_player_.Stop();
+        } else {
+          if(audio_background_player_.clip != null) {
+            audio_background_player_.Play();
+          }
+        }
+      } else if(eventArgs.IsStop) {
+        audio_background_player_.Stop();
+      } else if(eventArgs.Clip != null) {
+        audio_background_player_.clip = eventArgs.Clip;
       }
     } else {
       if (document_.UserSettingsInfo.SoundEnable) {
@@ -140,8 +150,15 @@ public class GameManager : Singleton<GameManager> {
 
   #region ProcessInternalEvent
   private void AudioRepeat() {
-    if (oneshot_repeat_clip_ != null && !audio_clip_player_.isPlaying) {
+    if (oneshot_repeat_clip_ != null && !
+      audio_clip_player_.isPlaying &&
+      document_.UserSettingsInfo.SoundEnable) {
       audio_clip_player_.PlayOneShot(oneshot_repeat_clip_);
+    }
+    if(audio_background_player_.clip != null && 
+      !audio_background_player_.isPlaying &&
+      document_.UserSettingsInfo.MusicEnable) {
+      audio_background_player_.Play();
     }
   }
 
