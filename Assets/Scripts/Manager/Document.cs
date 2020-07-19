@@ -74,7 +74,7 @@ public class Document : Singleton<Document> {
 
   public void NewGame() {
     operation_data_.Level = 1;
-    TotalTime = 10;
+    TotalTime = 61;
     HookSpeed = 3;
     TagetScore = 800;
     operation_data_.TotalScore = 0;
