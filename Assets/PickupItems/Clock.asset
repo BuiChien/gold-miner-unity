@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3869c440fe484b8bb0e6999d0126b, type: 3}
   m_Name: Clock
   m_EditorClassIdentifier: 
+  Name: Clock
+  Type: 0
+  Icon: {fileID: -2041690687368826714, guid: a4382cd18ccfc5544be07fc895c2ac3f, type: 3}
+  MinPrice: 10
+  MaxPrice: 20
+  Usage: Clock

@@ -12,10 +12,11 @@ public enum ItemPickupType {
 
 [CreateAssetMenu(fileName ="NewItemPickupStats", menuName = "Scriptable/ItemPickup", order = 1)]
 public class ItemPickupSo : ScriptableObject {
-  public string Name { get; set; }
-  public ItemPickupType Type { get; set; }
-  public Material Material { get; set; }
-  public Sprite Icon { get; set; }
-  public Rigidbody SpawnObject { get; set; }
-  public int Price { get; set; }
+  public string Name;
+  public ItemPickupType Type;
+  public Sprite Icon;
+  public Sprite InventoryIcon;
+  public int MinPrice;
+  public int MaxPrice;
+  public string Usage;
 }

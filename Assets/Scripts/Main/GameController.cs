@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour {
   private StatusPanel status_panel_;
   [SerializeField]
   private PopupMenu popup_menu_;
+  [SerializeField]
+  private Inventory inventory_;
 
   private Document document_;
   private CountdownTimer timer_;
@@ -52,6 +54,7 @@ public class GameController : MonoBehaviour {
     status_panel_.TargetScore = document_.TagetScore;
     status_panel_.Score = 0;
     player_.HookSpeed = document_.HookSpeed;
+    inventory_.SetDisplayItems(document_.BuyItems);
     StartCoroutine(LoadLevel());
   }
 

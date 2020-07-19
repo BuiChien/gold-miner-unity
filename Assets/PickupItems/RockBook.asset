@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3869c440fe484b8bb0e6999d0126b, type: 3}
   m_Name: RockBook
   m_EditorClassIdentifier: 
+  Name: 
+  Type: 0
+  Icon: {fileID: -3184672469281468652, guid: a4382cd18ccfc5544be07fc895c2ac3f, type: 3}
+  MinPrice: 0
+  MaxPrice: 0
+  Usage: 

@@ -116,9 +116,9 @@ public class GameManager : Singleton<GameManager> {
       return;
     }
     if (!eventArgs.IsAdditive) {
-      scenes_loaded_.ForEach(x => {
-        StartCoroutine(UnloadSceneAsync(x));
-      });
+      for(int i = 0; i < scenes_loaded_.Count; i++) {
+        StartCoroutine(UnloadSceneAsync(scenes_loaded_[i]));
+      }
     }
     StartCoroutine(LoadSceneAsync(eventArgs.SceneName));
   }

@@ -37,9 +37,9 @@ public class Document : Singleton<Document> {
   public int TotalTime { get; private set; }
   public bool IsVictory { get => TotalScore >= TagetScore; }
 
-  public List<ItemPickup> BuyItems {
+  public List<ItemPickupSo> BuyItems {
     get {
-      List<ItemPickup> buyItems = new List<ItemPickup>();
+      List<ItemPickupSo> buyItems = new List<ItemPickupSo>();
       buy_item_list_.ForEach(x => {
         buyItems.Add(x);
       });
@@ -47,11 +47,11 @@ public class Document : Singleton<Document> {
     }
   }
 
-  private List<ItemPickup> buy_item_list_;
+  private List<ItemPickupSo> buy_item_list_;
   #endregion
 
   public void Init() {
-    buy_item_list_ = new List<ItemPickup>();
+    buy_item_list_ = new List<ItemPickupSo>();
     TotalScore = operation_data_.TotalScore;
   }
 
@@ -74,7 +74,7 @@ public class Document : Singleton<Document> {
 
   public void NewGame() {
     operation_data_.Level = 1;
-    TotalTime = 61;
+    TotalTime = 10;
     HookSpeed = 3;
     TagetScore = 800;
     operation_data_.TotalScore = 0;
@@ -86,6 +86,7 @@ public class Document : Singleton<Document> {
     TotalTime = 61;
     TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
     LevelScore = (TagetScore - oldTargetScore) + Random.Range(800, 2000);
+    HookSpeed = 3;
   }
 
   public void UpdateScore() {
@@ -126,6 +127,16 @@ public class Document : Singleton<Document> {
 
   public void DropBomb() {
 
+  }
+
+  public void BuyPickupItem(ItemPickupSo item, int amount) {
+    buy_item_list_.Add(item);
+    TotalScore -= amount;
+    SaveData();
+  }
+
+  public void Reset() {
+    buy_item_list_.Clear();
   }
 
   public void SaveData() {

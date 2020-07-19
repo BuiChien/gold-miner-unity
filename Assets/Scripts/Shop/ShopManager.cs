@@ -14,13 +14,56 @@ public class ShopManager : MonoBehaviour {
   [SerializeField]
   private Button btn_next_level_;
   private Document document_;
+  [SerializeField]
+  private ShopItemDisplay[] items_display_;
+  private List<int> spawn_indexes_;
 
   private GameEventController game_event_controller_;
+
+  private int Level {
+    set {
+      txt_level_.text = "LEVEL " + value.ToString();
+    }
+  }
+
+  private int Score {
+    set {
+      txt_score_.text = "$ " + value.ToString();
+    }
+  }
+
   void Awake() {
     game_event_controller_ = GameEventController.Instance;
     game_event_controller_.GameEvent.AddListener(OnGameEventHandler);
-    btn_next_level_.onClick.AddListener(OnNextLevel);
+    btn_next_level_.onClick.AddListener(() => {
+      document_.GoNextLevel();
+      NotifyEvent(new ButtonEventArgs(""));
+      NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
+    });
     document_ = Document.Instance;
+  }
+
+  void Start() {
+    spawn_indexes_ = new List<int>();
+    int index;
+    document_.Reset();
+    Level = document_.Level;
+    Score = document_.TotalScore;
+    while(spawn_indexes_.Count <= items_display_.Length) {
+      index = UnityEngine.Random.Range(0, PickupSos.Length);
+      if(!spawn_indexes_.Contains(index)) {
+        spawn_indexes_.Add(index);
+      }
+    }
+    for (int i = 0; i < items_display_.Length; i++) {
+      items_display_[i].Character = PickupSos[spawn_indexes_[i]];
+      items_display_[i].GameEvent.AddListener((e) => {
+        ShopBuyItemEventArgs args = e as ShopBuyItemEventArgs;
+        NotifyEvent(e);
+        document_.BuyPickupItem(args.BuyItem.Character, args.Amount);
+        Score = document_.TotalScore;
+      });
+    }
   }
 
   // Update is called once per frame
@@ -46,11 +89,6 @@ public class ShopManager : MonoBehaviour {
       default:
         break;
     }
-  }
-
-  private void OnNextLevel() {
-    document_.GoNextLevel();
-    NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
   }
 
   void NotifyEvent(GameEventArgs gameEvent) {
