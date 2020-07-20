@@ -73,6 +73,7 @@ public class UiManager : Singleton<UiManager> {
         active_startup_ = false;
         active_main_menu_ = true;
         active_pause_menu_ = false;
+        background_.SetActive(true);
         NotifyEvent(new PlayAudioEventArgs(background_audio_clip_, true, false, true));
         break;
       case EventNames.STATE_CHANGED:
