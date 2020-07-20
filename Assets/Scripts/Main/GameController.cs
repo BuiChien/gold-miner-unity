@@ -36,7 +36,6 @@ public class GameController : MonoBehaviour {
   private Inventory inventory_;
 
   private Document document_;
-  private CountdownTimer timer_;
   #endregion
   #region UnityFuncs
   void Awake() {
@@ -45,11 +44,9 @@ public class GameController : MonoBehaviour {
     hook_area_.GameEvent.AddListener(OnGameEventHandler);
     player_.GameEvent.AddListener(OnGameEventHandler);
     document_ = Document.Instance;
-    timer_ = GetComponent<CountdownTimer>();
   }
 
   void Start() {
-    timer_.StartTime = document_.TotalTime;
     status_panel_.Level = document_.Level;
     status_panel_.TargetScore = document_.TagetScore;
     status_panel_.Score = 0;
@@ -59,9 +56,7 @@ public class GameController : MonoBehaviour {
   }
 
   void Update() {
-    status_panel_.TimeCounter = (int)timer_.Counter;
-    if (timer_.IsFire || level_.IsFinish()) {
-      timer_.Stop();
+    if (document_.IsFinished || level_.IsFinish()) {
       StartCoroutine(FinishLevel());
     }
   }
@@ -71,15 +66,13 @@ public class GameController : MonoBehaviour {
     popup_menu_.ShowLevelTarget(document_.Level, document_.TagetScore);
     level_.LoadLevel(document_.Level, document_.LevelScore);
     yield return new WaitForSeconds(1f);
-    timer_.Restart();
     popup_menu_.HideLevelTarget();
+    document_.StartTimer();
     yield return null;
   }
 
   private IEnumerator FinishLevel() {
-    if (document_.IsVictory) {
-      document_.SaveData();
-    }
+    document_.FinishLevel();
     popup_menu_.ShowLevelComplete(document_.IsVictory, document_.TotalScore);
     yield return null;
   }
@@ -91,6 +84,7 @@ public class GameController : MonoBehaviour {
         break;
       case EventNames.ATTACK: {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
+          inventory_.CanUse = true;
           document_.SetScoreAmount(attachEvent.Victim);
           NotifyEvent(new PlayAudioEventArgs(pulling_audio_, true));
           if (attachEvent.Victim.IsHeavy) {
@@ -102,18 +96,29 @@ public class GameController : MonoBehaviour {
           break;
         }
       case EventNames.PULL_SUCCESS:
+        inventory_.CanUse = false;
         OnPullSuccess();
         player_.HookSpeed = document_.HookSpeed;
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
         break;
-      case EventNames.DROP_BOMB:
-
+      case EventNames.USE_ITEM_PICKUP:
+        OnUseItemPickupHandler((UseItemPickupEventArgs)gameEvent);
         break;
       default:
         break;
     }
+  }
+
+  private void OnUseItemPickupHandler(UseItemPickupEventArgs gameEvent) {
+    switch (gameEvent.UseItem.Type) {
+      case ItemPickupType.BOMB:
+        break;
+      default:
+        break;
+    }
+    player_.UseWeapons();
   }
 
   private void OnPullSuccess() {
@@ -137,8 +142,7 @@ public class GameController : MonoBehaviour {
   private void OnGameStateChanged(StateChangedEventArgs gameEvent) {
     switch ((GameState)gameEvent.NextState) {
       case GameState.PAUSED:
-        timer_.Pause();
-        document_.SaveData();
+        document_.PauseLevel();
         break;
       default:
         break;

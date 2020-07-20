@@ -8,6 +8,10 @@ public class Rod : MonoBehaviour {
   public float RotationSpeed = 3;
   public float AngleRotationMax = 70;
   public bool IsIdle { get => hook_.IsIdle; }
+  public bool CanAttach {
+    get => hook_.CanAttach;
+    set { hook_.CanAttach = value; } 
+  }
   public float Speed { set {
       hook_.Speed = value;
     } 

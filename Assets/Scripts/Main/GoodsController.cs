@@ -46,7 +46,10 @@ public class GoodsController : GameScript, IVictim {
     }
   }
 
-  public virtual void Death() {
+  public virtual void Death(IAttacker attacker) {
+    if(attacker.Name == Bomb.MyName) {
+      //TODO:
+    }
     Destroy(gameObject);
   }
 

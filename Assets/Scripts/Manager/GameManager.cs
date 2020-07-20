@@ -189,9 +189,7 @@ public class GameManager : Singleton<GameManager> {
   }
 
   public void QuitGame() {
-    // Clean up application as necessary
-    // Maybe save the players game
-    Debug.Log("[GameManager] Quit Game.");
+    document_.SaveData();
     Application.Quit();
   }
   #endregion

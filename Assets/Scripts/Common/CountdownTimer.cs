@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CountdownTimer : GameScript {
   public float StartTime { get; set; }
-  public float Counter { get; private set; }
+  public float Counter { get; set; }
   public bool IsFire { get => (Counter <= 0) && !pause_; }
   private bool pause_;
   void Start() {
@@ -14,11 +14,12 @@ public class CountdownTimer : GameScript {
 
   void Update() {
     if(!pause_) {
-      Counter -= UnityEngine.Time.deltaTime;
+      Counter -= Time.deltaTime;
     }
   }
 
   public void Restart() {
+    Counter = StartTime;
     pause_ = false;
   }
 

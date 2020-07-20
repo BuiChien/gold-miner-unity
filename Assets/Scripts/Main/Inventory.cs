@@ -5,15 +5,23 @@ using UnityEngine;
 public class Inventory : GameScript {
   [SerializeField]
   private InventoryItem[] item_pickup_list_;
+
+  public bool CanUse {
+    set {
+      foreach(InventoryItem item in item_pickup_list_) {
+        item.CanUse = value;
+      }
+    }
+  }
   void Start() {
     RegisterGameEventController();
   }
 
-  public void SetDisplayItems(List<ItemPickupSo> items) {
+  public void SetDisplayItems(List<BoughtItem> items) {
     for(int i = 0; i < item_pickup_list_.Length; i++) {
       if(i < items.Count) {
-        if(items[i].InventoryIcon != null) {
-          item_pickup_list_[i].Item = items[i];
+        if(items[i].Character.InventoryIcon != null) {
+          item_pickup_list_[i].Item = items[i].Character;
           item_pickup_list_[i].GameEvent.AddListener((e) => {
             BroadcastEvent(e);
           });

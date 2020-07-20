@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : GameScript {
+  [SerializeField]
+  private PlayerSo character_;
   class PlayerState {
     public const string IDLE          = "Idle";
     public const string DROP_HOOK     = "DropHook";
@@ -26,7 +28,7 @@ public class Player : GameScript {
   void Start() {
     state_machine_ = new StateMachine();
     state_machine_.AddState(PlayerState.IDLE, () => {
-
+      rod_.CanAttach = true;
     }, (e) => {
       //Do nothing
     });
@@ -41,16 +43,24 @@ public class Player : GameScript {
       rod_.PullHook();
     }, (e) => {
       if(rod_.IsIdle) {
-        state_machine_.ChangeState(PlayerState.HAPPY);
-        NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
+        if (rod_.CanAttach) {
+          state_machine_.ChangeState(PlayerState.HAPPY);
+          NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
+        } else {
+          state_machine_.ChangeState(PlayerState.IDLE);
+        }
       }
     });
     state_machine_.AddState(PlayerState.PULL_HEAVY, () => {
       rod_.PullHook();
     }, (e) => {
       if (rod_.IsIdle) {
-        state_machine_.ChangeState(PlayerState.ANGRY);
-        NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
+        if(rod_.CanAttach) {
+          state_machine_.ChangeState(PlayerState.ANGRY);
+          NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
+        } else {
+          state_machine_.ChangeState(PlayerState.IDLE);
+        }
       }
     });
     state_machine_.AddState(PlayerState.ANGRY, () => {
@@ -78,6 +88,10 @@ public class Player : GameScript {
     if(state_machine_.StateName == PlayerState.IDLE) {
       state_machine_.ChangeState(PlayerState.DROP_HOOK);
     }
+  }
+
+  public void UseWeapons() {
+    rod_.CanAttach = false;
   }
 
   public void Pull() {

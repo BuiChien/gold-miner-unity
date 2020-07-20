@@ -6,7 +6,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour {
-  public ItemPickupSo[] PickupSos;
   [SerializeField]
   private Text txt_level_;
   [SerializeField]
@@ -50,13 +49,13 @@ public class ShopManager : MonoBehaviour {
     Level = document_.Level;
     Score = document_.TotalScore;
     while(spawn_indexes_.Count <= items_display_.Length) {
-      index = UnityEngine.Random.Range(0, PickupSos.Length);
+      index = UnityEngine.Random.Range(0, document_.PickupSos.Count);
       if(!spawn_indexes_.Contains(index)) {
         spawn_indexes_.Add(index);
       }
     }
     for (int i = 0; i < items_display_.Length; i++) {
-      items_display_[i].Character = PickupSos[spawn_indexes_[i]];
+      items_display_[i].Character = document_.PickupSos[spawn_indexes_[i]];
       items_display_[i].GameEvent.AddListener((e) => {
         ShopBuyItemEventArgs args = e as ShopBuyItemEventArgs;
         NotifyEvent(e);

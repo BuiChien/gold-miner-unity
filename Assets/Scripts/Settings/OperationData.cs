@@ -7,4 +7,5 @@ public class OperationData : ScriptableObject {
   public int Level;
   public int TotalScore;
   public int TargetScore;
+  public int BombCount;
 }
