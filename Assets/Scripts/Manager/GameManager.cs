@@ -77,6 +77,9 @@ public class GameManager : Singleton<GameManager> {
       case EventNames.RESUME:
         TogglePause();
         break;
+      case EventNames.SHOW_MENU:
+        UnloadAll();
+        break;
       case EventNames.QUIT:
         QuitGame();
         break;
@@ -116,11 +119,15 @@ public class GameManager : Singleton<GameManager> {
       return;
     }
     if (!eventArgs.IsAdditive) {
-      for(int i = 0; i < scenes_loaded_.Count; i++) {
-        StartCoroutine(UnloadSceneAsync(scenes_loaded_[i]));
-      }
+      UnloadAll();
     }
     StartCoroutine(LoadSceneAsync(eventArgs.SceneName));
+  }
+
+  private void UnloadAll() {
+    for (int i = 0; i < scenes_loaded_.Count; i++) {
+      StartCoroutine(UnloadSceneAsync(scenes_loaded_[i]));
+    }
   }
 
   private IEnumerator LoadSceneAsync(string sceneName) {

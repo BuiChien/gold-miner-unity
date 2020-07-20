@@ -45,7 +45,7 @@ public class ShopManager : MonoBehaviour {
   void Start() {
     spawn_indexes_ = new List<int>();
     int index;
-    document_.Reset();
+    document_.Clear();
     Level = document_.Level;
     Score = document_.TotalScore;
     while(spawn_indexes_.Count <= items_display_.Length) {

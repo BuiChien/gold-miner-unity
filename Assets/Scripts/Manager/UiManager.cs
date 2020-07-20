@@ -69,6 +69,7 @@ public class UiManager : Singleton<UiManager> {
         }
         break;
       case EventNames.STARTUP_SUCCESS:
+      case EventNames.SHOW_MENU:
         active_startup_ = false;
         active_main_menu_ = true;
         active_pause_menu_ = false;

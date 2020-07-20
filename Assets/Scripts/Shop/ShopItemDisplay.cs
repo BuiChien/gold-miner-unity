@@ -40,6 +40,7 @@ public class ShopItemDisplay : GameScript {
     btn_ads_.gameObject.SetActive(UnityEngine.Random.Range(0, 2) > 0 ? true : false);
     btn_buy_.onClick.AddListener(() => {
       btn_buy_.interactable = false;
+      btn_ads_.interactable = !pickup_item_.Character.IsOnlyOneLevel;
       NotifyEvent(new ShopBuyItemEventArgs(pickup_item_, pickup_item_.Price));
     });
     btn_ads_.onClick.AddListener(() => {

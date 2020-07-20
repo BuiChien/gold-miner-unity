@@ -20,3 +20,4 @@ MonoBehaviour:
   MinPrice: 30
   MaxPrice: 100
   Usage: Test
+  OnlyOneLevel: 0

@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f609c77c652a4fa4fb5c6206c368e731, type: 3}
   m_Name: OperationData
   m_EditorClassIdentifier: 
-  Level: 1
+  Level: 2
+  TotalScore: 1160
+  TargetScore: 0
+  BombCount: 0
+  IsFirstTime: 1

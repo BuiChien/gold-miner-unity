@@ -58,6 +58,8 @@ public class GameController : MonoBehaviour {
   void Update() {
     if (document_.IsFinished || level_.IsFinish()) {
       StartCoroutine(FinishLevel());
+    } else {
+      status_panel_.TimeCounter = document_.Counter;
     }
   }
 #endregion

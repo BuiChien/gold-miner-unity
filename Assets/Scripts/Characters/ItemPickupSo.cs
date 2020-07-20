@@ -19,4 +19,5 @@ public class ItemPickupSo : ScriptableObject {
   public int MinPrice;
   public int MaxPrice;
   public string Usage;
+  public bool IsOnlyOneLevel;
 }

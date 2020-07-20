@@ -8,4 +8,5 @@ public class OperationData : ScriptableObject {
   public int TotalScore;
   public int TargetScore;
   public int BombCount;
+  public bool IsFirstTime;
 }

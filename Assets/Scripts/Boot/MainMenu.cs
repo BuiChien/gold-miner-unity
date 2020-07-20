@@ -20,6 +20,7 @@ public class MainMenu : GameScript {
     QuitButton.onClick.AddListener(OnButtonQuitClick);
     SettingsButton.onClick.AddListener(OnButtonSettingsClick);
     setting_panel_.GameEvent.AddListener(OnGameEventHandler);
+    ContineButton.gameObject.SetActive(!Document.Instance.IsFirstTime);
   }
 
   void Update() {

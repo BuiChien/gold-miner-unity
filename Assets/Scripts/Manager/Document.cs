@@ -53,14 +53,19 @@ public class Document : Singleton<Document> {
   public bool IsVictory { get => TotalScore >= TagetScore; }
 
   public bool IsFinished { get => timer_.IsFire; }
+  public bool IsFirstTime { get => operation_data_.IsFirstTime; }
+
+  public int Counter {
+    get => (int)timer_.Counter;
+  }
 
   public List<BoughtItem> BuyItems {
     get {
       List<BoughtItem> buyItems = new List<BoughtItem>();
       foreach(KeyValuePair<ItemPickupType, BoughtItem> item in bought_item_dict_) {
-        BuyItems.Add(item.Value);
+        buyItems.Add(item.Value);
       }
-      return BuyItems;
+      return buyItems;
     }
   }
   private Dictionary<ItemPickupType, BoughtItem> bought_item_dict_;
@@ -76,10 +81,7 @@ public class Document : Singleton<Document> {
     LoadSetting(operation_data_);
     bought_item_dict_ = new Dictionary<ItemPickupType, BoughtItem>();
     TotalScore = operation_data_.TotalScore;
-    int bombCount = operation_data_.BombCount;
-    if (bombCount > 0) {
-      BuyPickupItem(PickupSos.Find(x => x.Type == ItemPickupType.BOMB), 0, bombCount);
-    }
+    LoadBomb();
   }
 
   public void GoNextLevel() {
@@ -97,10 +99,13 @@ public class Document : Singleton<Document> {
     int oldTargetScore = TagetScore;
     TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
     LevelScore = (TagetScore - oldTargetScore) + Random.Range(800, 2000);
+    TotalScore = operation_data_.TotalScore;
     timer_.StartTime = TotalTime;
+    timer_.Restart();
   }
 
   public void NewGame() {
+    operation_data_.IsFirstTime = false;
     operation_data_.Level = 1;
     TotalTime = 61;
     HookSpeed = 3;
@@ -183,7 +188,12 @@ public class Document : Singleton<Document> {
     SaveData();
   }
 
-  public void Reset() {
+  public void Clear() {
+    for(int i = 0; i < PickupSos.Count; i++) {
+      if(bought_item_dict_.ContainsKey(PickupSos[i].Type) && PickupSos[i].IsOnlyOneLevel) {
+        bought_item_dict_.Remove(PickupSos[i].Type);
+      }
+    }
     bought_item_dict_.Clear();
   }
 
@@ -203,5 +213,12 @@ public class Document : Singleton<Document> {
     string settingData = JsonUtility.ToJson(instance);
     PlayerPrefs.SetString(instance.ToString(), settingData);
     PlayerPrefs.Save();
+  }
+
+  private void LoadBomb() {
+    int bombCount = operation_data_.BombCount;
+    if (bombCount > 0) {
+      BuyPickupItem(PickupSos.Find(x => x.Type == ItemPickupType.BOMB), 0, bombCount);
+    }
   }
 }
