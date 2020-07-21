@@ -174,16 +174,12 @@ public class GameManager : Singleton<GameManager> {
     current_state_ = state;
     switch (CurrentState) {
       case GameState.PREGAME:
-        // Initialize any systems that need to be reset
-        Time.timeScale = 1.0f;
         break;
       case GameState.RUNNING:
-        //  Unlock player, enemies and input in other systems, update tick if you are managing time
-        Time.timeScale = 1.0f;
+        //TODO: Audio restart
         break;
       case GameState.PAUSED:
-        // Pause player, enemies etc, Lock other input in other systems
-        Time.timeScale = 0.0f;
+        //TODO: Audio stop
         break;
       default:
         break;

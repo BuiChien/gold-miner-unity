@@ -12,13 +12,13 @@ public class LevelTargetPanel : MonoBehaviour {
   private Animator animator_;
   public int Level {
     set {
-      level_.text = value.ToString();
+      level_.text = "LEVEL" + value.ToString();
     }
   }
 
   public int TargetScore {
     set {
-      target_score_.text = value.ToString();
+      target_score_.text = "$" + value.ToString();
     }
   }
 

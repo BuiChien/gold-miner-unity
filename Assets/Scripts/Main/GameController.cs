@@ -60,6 +60,9 @@ public class GameController : MonoBehaviour {
       StartCoroutine(FinishLevel());
     } else {
       status_panel_.TimeCounter = document_.Counter;
+      if(document_.Counter < 10) {
+        NotifyEvent(new PlayAudioEventArgs(timeup_count_audio_));
+      }
     }
   }
 #endregion
@@ -143,6 +146,9 @@ public class GameController : MonoBehaviour {
 
   private void OnGameStateChanged(StateChangedEventArgs gameEvent) {
     switch ((GameState)gameEvent.NextState) {
+      case GameState.RUNNING:
+        document_.ResumeLevel();
+        break;
       case GameState.PAUSED:
         document_.PauseLevel();
         break;

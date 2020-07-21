@@ -20,13 +20,13 @@ public class InventoryItem : GameScript {
     get => item_;
     set {
       item_ = value;
-      GetComponent<Image>().color = Color.white;
       GetComponent<Image>().sprite = value.InventoryIcon;
+      GetComponent<Image>().color = new Color(194, 194, 194, 255);
     }
   }
 
   void Start() {
-    GetComponent<Image>().color = Color.clear;
+    GetComponent<Image>().color = new Color(194,194,194,0);
     button_ = GetComponent<Button>();
     button_.onClick.AddListener(() => {
       if(CanUse) {

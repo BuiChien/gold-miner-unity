@@ -166,6 +166,10 @@ public class Document : Singleton<Document> {
     }
   }
 
+  public void ResumeLevel() {
+    timer_.Resume();
+  }
+
   public void PauseLevel() {
     timer_.Pause();
     SaveData();

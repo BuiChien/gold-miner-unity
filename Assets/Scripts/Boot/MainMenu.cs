@@ -20,11 +20,12 @@ public class MainMenu : GameScript {
     QuitButton.onClick.AddListener(OnButtonQuitClick);
     SettingsButton.onClick.AddListener(OnButtonSettingsClick);
     setting_panel_.GameEvent.AddListener(OnGameEventHandler);
-    ContineButton.gameObject.SetActive(!Document.Instance.IsFirstTime);
   }
 
   void Update() {
-
+    if(gameObject.activeSelf) {
+      ContineButton.gameObject.SetActive(!Document.Instance.IsFirstTime);
+    }
   }
 
   private void OnGameEventHandler(GameEventArgs arg0) {
@@ -33,6 +34,7 @@ public class MainMenu : GameScript {
       SettingsButton.interactable = true;
       QuitButton.interactable = true;
       ContineButton.interactable = true;
+      setting_panel_.Visible = false;
     }
   }
 

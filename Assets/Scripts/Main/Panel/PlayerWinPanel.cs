@@ -15,7 +15,7 @@ public class PlayerWinPanel : MonoBehaviour {
   private Animator animator_;
   public int Score {
     set {
-      score_.text = value.ToString();
+      score_.text = "$" + value.ToString();
     }
   }
 
