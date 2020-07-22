@@ -19,7 +19,7 @@ public class ShopItemDisplay : GameScript {
     set {
       pickup_item_.Character = value;
       txt_name_.text = pickup_item_.Name;
-      txt_price_.text = pickup_item_.Price.ToString();
+      txt_price_.text = "$" + pickup_item_.Price.ToString();
       txt_usage_.text = pickup_item_.Usage;
     }
   }

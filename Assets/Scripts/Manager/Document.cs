@@ -111,8 +111,10 @@ public class Document : Singleton<Document> {
     HookSpeed = 3;
     TagetScore = 800;
     operation_data_.TotalScore = 0;
+    TotalScore = 0;
     LevelScore = TagetScore + Random.Range(800, 2000);
     timer_.StartTime = TotalTime;
+    SaveData();
   }
 
   public void StartTimer() {

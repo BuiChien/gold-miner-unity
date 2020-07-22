@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour {
   void Start() {
     status_panel_.Level = document_.Level;
     status_panel_.TargetScore = document_.TagetScore;
-    status_panel_.Score = 0;
+    status_panel_.Score = document_.TotalScore;
     player_.HookSpeed = document_.HookSpeed;
     inventory_.SetDisplayItems(document_.BuyItems);
     StartCoroutine(LoadLevel());
