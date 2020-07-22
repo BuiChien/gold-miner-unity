@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class MainMenu : GameScript {
   public Button NewGameButton;
   public Button ContineButton;
-  public Button QuitButton;
   public Button SettingsButton;
 
   [SerializeField]
@@ -17,7 +16,6 @@ public class MainMenu : GameScript {
     RegisterGameEventController();
     NewGameButton.onClick.AddListener(OnButtonNewGameClick);
     ContineButton.onClick.AddListener(OnButtonContineClick);
-    QuitButton.onClick.AddListener(OnButtonQuitClick);
     SettingsButton.onClick.AddListener(OnButtonSettingsClick);
     setting_panel_.GameEvent.AddListener(OnGameEventHandler);
   }
@@ -32,7 +30,6 @@ public class MainMenu : GameScript {
     if(arg0.Name == "CloseSetting") {
       NewGameButton.interactable = true;
       SettingsButton.interactable = true;
-      QuitButton.interactable = true;
       ContineButton.interactable = true;
       setting_panel_.Visible = false;
     }
@@ -42,13 +39,8 @@ public class MainMenu : GameScript {
     setting_panel_.Visible = true;
     NewGameButton.interactable = false;
     SettingsButton.interactable = false;
-    QuitButton.interactable = false;
     ContineButton.interactable = false;
     BroadcastEvent(new ButtonEventArgs(""));
-  }
-
-  private void OnButtonQuitClick() {
-    BroadcastEvent(new ButtonEventArgs(EventNames.QUIT));
   }
 
   private void OnButtonContineClick() {

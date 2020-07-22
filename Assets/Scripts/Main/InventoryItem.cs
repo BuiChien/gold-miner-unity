@@ -21,12 +21,12 @@ public class InventoryItem : GameScript {
     set {
       item_ = value;
       GetComponent<Image>().sprite = value.InventoryIcon;
-      GetComponent<Image>().color = new Color(194, 194, 194, 255);
+      gameObject.SetActive(true);
     }
   }
 
-  void Start() {
-    GetComponent<Image>().color = new Color(194,194,194,0);
+  void Awake() {
+    gameObject.SetActive(false);
     button_ = GetComponent<Button>();
     button_.onClick.AddListener(() => {
       if(CanUse) {
