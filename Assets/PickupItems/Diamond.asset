@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Diamond
   m_EditorClassIdentifier: 
   Name: 
-  Type: 0
+  Type: 5
   Icon: {fileID: 0}
   InventoryIcon: {fileID: 0}
   MinPrice: 200

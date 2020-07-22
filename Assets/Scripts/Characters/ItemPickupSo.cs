@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum ItemPickupType {
   BOMB,
-  BOOK_STONE,
+  ROCK_BOOK,
   CLOCK,
   POWER,
+  CLOVER,
   DIAMOND
 }
 

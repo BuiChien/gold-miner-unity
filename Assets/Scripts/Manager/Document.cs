@@ -140,7 +140,7 @@ public class Document : Singleton<Document> {
   public void SetScoreAmount(IVictim victim) {
     switch (victim.Tag) {
       case "Rock":
-        if (bought_item_dict_.ContainsKey(ItemPickupType.BOOK_STONE)) {
+        if (bought_item_dict_.ContainsKey(ItemPickupType.ROCK_BOOK)) {
           ScoreAmount = victim.ScoreAmount * 3;
         } else {
           ScoreAmount = victim.ScoreAmount;

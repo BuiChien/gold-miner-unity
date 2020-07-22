@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Clock
   m_EditorClassIdentifier: 
   Name: Clock
-  Type: 0
+  Type: 2
   Icon: {fileID: -2041690687368826714, guid: a4382cd18ccfc5544be07fc895c2ac3f, type: 3}
   InventoryIcon: {fileID: 0}
   MinPrice: 10
