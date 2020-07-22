@@ -34,8 +34,8 @@ public class GameController : MonoBehaviour {
   private PopupMenu popup_menu_;
   [SerializeField]
   private Inventory inventory_;
-
   private Document document_;
+  private bool level_finished_;
   #endregion
   #region UnityFuncs
   void Awake() {
@@ -47,6 +47,7 @@ public class GameController : MonoBehaviour {
   }
 
   void Start() {
+    level_finished_ = false;
     status_panel_.Level = document_.Level;
     status_panel_.TargetScore = document_.TagetScore;
     status_panel_.Score = document_.TotalScore;
@@ -56,8 +57,13 @@ public class GameController : MonoBehaviour {
   }
 
   void Update() {
+    if(level_finished_) {
+      return;
+    }
     if (document_.IsFinished || level_.IsFinish()) {
+      player_.Abort();
       StartCoroutine(FinishLevel());
+      level_finished_ = true;
     } else {
       status_panel_.TimeCounter = document_.Counter;
       if(document_.Counter < 10) {

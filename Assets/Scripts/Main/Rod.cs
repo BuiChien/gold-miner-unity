@@ -35,6 +35,10 @@ public class Rod : MonoBehaviour {
     hook_.Drop();
   }
 
+  public void Abort() {
+
+  }
+
   public void PullHook() {
     hook_.Pull();
   }

@@ -94,6 +94,10 @@ public class Player : GameScript {
     rod_.CanAttach = false;
   }
 
+  public void Abort() {
+    rod_.Abort();
+  }
+
   public void Pull() {
     if (state_machine_.StateName == PlayerState.DROP_HOOK) {
       state_machine_.ChangeState(PlayerState.PULL);
