@@ -25,4 +25,5 @@ public class GoodsSo : ScriptableObject {
   public float Scale;
   public bool IsHeavy;
   public int ScoreAmount;
+  public string Tag;
 }

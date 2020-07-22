@@ -18,3 +18,4 @@ MonoBehaviour:
   Scale: 1
   IsHeavy: 0
   ScoreAmount: 500
+  Tag: Diamond

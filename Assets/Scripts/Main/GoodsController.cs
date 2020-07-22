@@ -10,7 +10,7 @@ public class GoodsController : GameScript, IVictim {
   }
 
   public int Id => (int)character_.Type;
-  public string Tag => gameObject.tag;
+  public string Tag => character_.Tag;
 
   public bool IsHeavy {
     get => character_.IsHeavy;

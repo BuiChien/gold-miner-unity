@@ -18,3 +18,4 @@ MonoBehaviour:
   Scale: 1
   IsHeavy: 1
   ScoreAmount: 80
+  Tag: Rock
