@@ -96,9 +96,6 @@ public class UiManager : Singleton<UiManager> {
 
   private void OnButtonEventHandler(ButtonEventArgs buttonEvent) {
     switch (buttonEvent.ButtonName) {
-      case EventNames.RESTART:
-        active_pause_menu_ = false;
-        break;
       case EventNames.NEWGAME: {
           active_main_menu_ = false;
           background_.SetActive(false);
