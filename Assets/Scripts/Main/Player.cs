@@ -27,8 +27,10 @@ public class Player : GameScript {
   [SerializeField]
   private Rod rod_;
   private StateMachine state_machine_;
+  public bool IsAbort { get; private set; }
 
   void Start() {
+    IsAbort = false;
     state_machine_ = new StateMachine();
     state_machine_.AddState(PlayerState.IDLE, () => {
       rod_.CanAttach = true;
@@ -80,10 +82,16 @@ public class Player : GameScript {
   }
 
   void Update() {
+    if(IsAbort) {
+      return;
+    }
     state_machine_.ProcessEvent(null);
   }
 
   void FixedUpdate() {
+    if (IsAbort) {
+      return;
+    }
     state_machine_.ProcessEvent(null);
   }
 
@@ -98,6 +106,7 @@ public class Player : GameScript {
   }
 
   public void Abort() {
+    IsAbort = true;
     rod_.Abort();
   }
 

@@ -106,4 +106,13 @@ public class Hook : MonoBehaviour, IAttacker {
   public void OnAttach(IVictim victim) {
     Victim = victim;
   }
+
+  public void Abort() {
+    if (state_machine_.StateName != HookState.IDLE) {
+      state_machine_.ChangeState(HookState.IDLE);
+    }
+    if(Victim != null) {
+      Victim.Death(this);
+    }
+  }
 }

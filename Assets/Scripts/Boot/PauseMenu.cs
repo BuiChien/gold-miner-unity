@@ -24,6 +24,5 @@ public class PauseMenu : GameScript {
   }
 
   void OnButtonRestartClick() {
-    BroadcastEvent(new ButtonEventArgs(EventNames.RESTART));
   }
 }

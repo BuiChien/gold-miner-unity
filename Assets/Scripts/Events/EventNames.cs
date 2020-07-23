@@ -7,7 +7,6 @@
 
   // Control event
   public const string QUIT                  = "Quit";
-  public const string RESTART               = "Restart";
   public const string RESUME                = "Resume";
   public const string CONTINUE              = "Continue";
   public const string NEWGAME               = "NewGame";

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour {
-  private Spawner good_spawner_;
+  private Spawner spawner_;
 
   void Awake() {
-    good_spawner_ = gameObject.GetComponent<Spawner>();
+    spawner_ = gameObject.GetComponent<Spawner>();
   }
 
   void Update() {
@@ -14,12 +14,10 @@ public class Level : MonoBehaviour {
   }
 
   public void LoadLevel(int level, int targetScore) {
-    good_spawner_.Spawn(level, targetScore);
+    spawner_.Spawn(level, targetScore);
   }
 
   public bool IsFinish() {
-    bool bRet = false;
-
-    return bRet;
+    return spawner_.Count <= 0;
   }
 }

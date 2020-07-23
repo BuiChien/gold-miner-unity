@@ -26,7 +26,7 @@ public class GoodsController : GameScript, IVictim {
   }
 
   public Vector3 Position => transform.position;
-
+  public ISpawner Spawner;
   void Awake() {
     collider_ = GetComponent<PolygonCollider2D>();
   }
@@ -51,6 +51,9 @@ public class GoodsController : GameScript, IVictim {
   public virtual void Death(IAttacker attacker) {
     if(attacker.Name == Bomb.MyName) {
       //TODO:
+    }
+    if(Spawner != null) {
+      Spawner.OnSpawnableDestroy(gameObject);
     }
     Destroy(gameObject);
   }

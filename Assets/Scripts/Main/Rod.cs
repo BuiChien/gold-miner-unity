@@ -16,12 +16,16 @@ public class Rod : MonoBehaviour {
       hook_.Speed = value;
     } 
   }
+  public bool IsAbort { get; private set; }
   public IVictim Victim => hook_.Victim;
   void Start() {
-
+    IsAbort = false;
   }
 
   void Update() {
+    if(IsAbort) {
+      return;
+    }
     gameObject.GetComponent<LineRenderer>().SetPosition(0, transform.position);
     gameObject.GetComponent<LineRenderer>().SetPosition(1, hook_.gameObject.transform.position);
   }
@@ -37,7 +41,7 @@ public class Rod : MonoBehaviour {
   }
 
   public void Abort() {
-
+    IsAbort = true;
   }
 
   public void PullHook() {

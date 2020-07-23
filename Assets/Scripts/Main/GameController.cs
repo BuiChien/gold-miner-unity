@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour {
   private Inventory inventory_;
   [SerializeField]
   private Waypoint[] bomb_waypoints_;
+  [SerializeField]
+  private AudioClip background_audio_clip_ = null;
   private Document document_;
   private bool level_finished_;
   #endregion
@@ -67,10 +69,11 @@ public class GameController : MonoBehaviour {
       player_.Abort();
       StartCoroutine(FinishLevel());
       level_finished_ = true;
+      StopAllCoroutines();
     } else {
       status_panel_.TimeCounter = document_.Counter;
-      if(document_.Counter < 10) {
-        NotifyEvent(new PlayAudioEventArgs(timeup_count_audio_));
+      if(document_.Counter <= 10) {
+        NotifyEvent(new PlayAudioEventArgs(timeup_count_audio_, true));
       }
     }
   }
@@ -82,12 +85,14 @@ public class GameController : MonoBehaviour {
     yield return new WaitForSeconds(1f);
     popup_menu_.HideLevelTarget();
     document_.StartTimer();
+    NotifyEvent(new PlayAudioEventArgs(background_audio_clip_, true, false, true));
     yield return null;
   }
 
   private IEnumerator FinishLevel() {
     document_.FinishLevel();
     popup_menu_.ShowLevelComplete(document_.IsVictory, document_.TotalScore);
+    NotifyEvent(new PlayAudioEventArgs(false, true));
     yield return null;
   }
 
@@ -166,6 +171,7 @@ public class GameController : MonoBehaviour {
         document_.ResumeLevel();
         break;
       case GameState.PAUSED:
+        NotifyEvent(new PlayAudioEventArgs(false, true));
         document_.PauseLevel();
         break;
       default:

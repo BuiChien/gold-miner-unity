@@ -52,6 +52,15 @@ public class GameManager : Singleton<GameManager> {
   void FixedUpdate() {
     AudioRepeat();
   }
+
+  void OnApplicationPause(bool pause) {
+    document_.SaveData();
+  }
+
+  void OnApplicationQuit() {
+    document_.SaveData();
+  }
+
   #endregion
 
   #region ProcessExternalEvent
@@ -71,14 +80,13 @@ public class GameManager : Singleton<GameManager> {
           PlayAudio((PlayAudioEventArgs)gameEvent);
         }
         break;
-      case EventNames.RESTART:
-        UpdateState(GameState.PREGAME);
-        break;
       case EventNames.RESUME:
         TogglePause();
         break;
       case EventNames.SHOW_MENU:
         UnloadAll();
+        oneshot_repeat_clip_ = null;
+        audio_clip_player_.Stop();
         break;
       case EventNames.QUIT:
         QuitGame();
@@ -192,7 +200,6 @@ public class GameManager : Singleton<GameManager> {
   }
 
   public void QuitGame() {
-    document_.SaveData();
     Application.Quit();
   }
   #endregion

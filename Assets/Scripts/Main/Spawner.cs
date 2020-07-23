@@ -15,14 +15,18 @@ public class Spawner : MonoBehaviour, ISpawner {
   private SpawnZone whole_level_zone_;
   private int total_score_;
   private int level_;
-
+  private List<GameObject> list_spawnable_;
   private int precious_min_score_;
   private int precious_max_score_;
   private int common_min_score_;
   private int common_max_score_;
+
+  public int Count => list_spawnable_.Count;
+
   void Awake() {
     UpdateMaxMin(common_goods_list_, ref common_max_score_, ref common_min_score_);
     UpdateMaxMin(precious_goods_list_, ref precious_max_score_, ref precious_min_score_);
+    list_spawnable_ = new List<GameObject>();
   }
 
   public void Spawn(int level, int totalScore) {
@@ -66,7 +70,9 @@ public class Spawner : MonoBehaviour, ISpawner {
         continue;
       }
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, precious_material_zone_.transform);
+      spawnObj.GetComponent<GoodsController>().Spawner = this;
       spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;
     }
   }
@@ -87,7 +93,15 @@ public class Spawner : MonoBehaviour, ISpawner {
       }
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
       spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      spawnObj.GetComponent<GoodsController>().Spawner = this;
+      list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;
+    }
+  }
+
+  public void OnSpawnableDestroy(GameObject obj) {
+    if(list_spawnable_.Contains(obj)) {
+      list_spawnable_.Remove(obj);
     }
   }
 }
