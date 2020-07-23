@@ -25,6 +25,8 @@ public class GoodsController : GameScript, IVictim {
     } 
   }
 
+  public Vector3 Position => transform.position;
+
   void Awake() {
     collider_ = GetComponent<PolygonCollider2D>();
   }

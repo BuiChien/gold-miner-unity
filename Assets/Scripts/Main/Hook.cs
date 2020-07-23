@@ -11,7 +11,7 @@ public class Hook : MonoBehaviour, IAttacker {
     public const string PULL = "Pull";
   }
   public float Speed { get; set; }
-  private IVictim victim_ { get; set; }
+  public IVictim Victim { get; private set; }
   [SerializeField]
   private GameObject hook_;
   [SerializeField]
@@ -61,16 +61,16 @@ public class Hook : MonoBehaviour, IAttacker {
         GetComponent<Rigidbody2D>().velocity = velocity_ * Speed * 3;
       }
     }, (e) => {
-      if(victim_ != null) {
-        victim_.DragAway(transform);
+      if(Victim != null) {
+        Victim.DragAway(transform);
       }
       if (transform.localPosition.y > original_position_.y) {
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         transform.localPosition = original_position_;
-        if(victim_ != null && CanAttach) {
-          victim_.Death(this);
+        if(Victim != null && CanAttach) {
+          Victim.Death(this);
         }
-        victim_ = null;
+        Victim = null;
         state_machine_.ChangeState(HookState.IDLE);
       }
     });
@@ -104,6 +104,6 @@ public class Hook : MonoBehaviour, IAttacker {
   }
 
   public void OnAttach(IVictim victim) {
-    victim_ = victim;
+    Victim = victim;
   }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
   #region PrivateField
@@ -34,6 +35,8 @@ public class GameController : MonoBehaviour {
   private PopupMenu popup_menu_;
   [SerializeField]
   private Inventory inventory_;
+  [SerializeField]
+  private Waypoint[] bomb_waypoints_;
   private Document document_;
   private bool level_finished_;
   #endregion
@@ -125,10 +128,17 @@ public class GameController : MonoBehaviour {
   private void OnUseItemPickupHandler(UseItemPickupEventArgs gameEvent) {
     switch (gameEvent.UseItem.Type) {
       case ItemPickupType.BOMB:
+        GameObject bomb = new GameObject();
+        Image image = bomb.AddComponent<Image>();
+        image.sprite = gameEvent.UseItem.Icon;
+        Bomb bObj = bomb.AddComponent<Bomb>();
+        bObj.Waypoints = bomb_waypoints_;
+        bObj.Target = player_.Victim;
         break;
       default:
         break;
     }
+    document_.UseItemPickup(gameEvent.UseItem);
     player_.UseWeapons();
   }
 

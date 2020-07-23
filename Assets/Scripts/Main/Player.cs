@@ -19,6 +19,9 @@ public class Player : GameScript {
       rod_.Speed = value;
     }
   }
+
+  public IVictim Victim => rod_.Victim;
+
   [SerializeField]
   private Animator animimator_;
   [SerializeField]

@@ -16,6 +16,7 @@ public class Rod : MonoBehaviour {
       hook_.Speed = value;
     } 
   }
+  public IVictim Victim => hook_.Victim;
   void Start() {
 
   }
