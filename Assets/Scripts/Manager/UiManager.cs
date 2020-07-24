@@ -58,9 +58,6 @@ public class UiManager : Singleton<UiManager> {
     startup_.GameEvent.AddListener(OnGameEventHandler);
   }
 
-  void Update() {
-
-  }
   #endregion
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch (gameEvent.Name) {
@@ -74,7 +71,7 @@ public class UiManager : Singleton<UiManager> {
         active_main_menu_ = true;
         active_pause_menu_ = false;
         background_.SetActive(true);
-        NotifyEvent(new PlayAudioEventArgs(background_audio_clip_, true, false, true));
+        SoundManager.Instance.PlayBackground(background_audio_clip_);
         break;
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
@@ -100,6 +97,7 @@ public class UiManager : Singleton<UiManager> {
           active_main_menu_ = false;
           background_.SetActive(false);
           Document.Instance.NewGame();
+          SoundManager.Instance.StopBackground();
           NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
         }
         break;
@@ -107,6 +105,7 @@ public class UiManager : Singleton<UiManager> {
           active_main_menu_ = false;
           background_.SetActive(false);
           Document.Instance.Continue();
+          SoundManager.Instance.StopBackground();
           NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
         }
         break;

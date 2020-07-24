@@ -65,11 +65,6 @@ public class ShopManager : MonoBehaviour {
     }
   }
 
-  // Update is called once per frame
-  void Update() {
-
-  }
-
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch (gameEvent.Name) {
       case EventNames.STATE_CHANGED:

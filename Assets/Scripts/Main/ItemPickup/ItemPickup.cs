@@ -22,11 +22,4 @@ public class ItemPickup : MonoBehaviour {
   public Sprite Icon => character_.Icon;
 
   public ItemPickupType Type { get => character_.Type; }
-  void Start() {
-
-  }
-
-  void Update() {
-
-  }
 }

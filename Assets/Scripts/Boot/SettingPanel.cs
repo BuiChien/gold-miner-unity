@@ -57,8 +57,10 @@ public class SettingPanel : GameScript {
     btn_music_.onClick.AddListener(() => {
       BroadcastEvent(new ButtonEventArgs(""));
       music_enable_ = !music_enable_;
-      if(!music_enable_) {
-        BroadcastEvent(new PlayAudioEventArgs(true, true));
+      if(music_enable_) {
+        SoundManager.Instance.ResumeBackground();
+      } else {
+        SoundManager.Instance.PauseBackground();
       }
     });
     btn_sound_.onClick.AddListener(() => {

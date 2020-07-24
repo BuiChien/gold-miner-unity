@@ -17,7 +17,7 @@ public class Rod : MonoBehaviour {
     } 
   }
   public bool IsAbort { get; private set; }
-  public IVictim Victim => hook_.Victim;
+  public IVictim Victim => hook_.Target;
   void Start() {
     IsAbort = false;
   }

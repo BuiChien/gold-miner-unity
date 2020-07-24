@@ -17,18 +17,13 @@ public class GameManager : Singleton<GameManager> {
   private GameEventController game_event_controller_;
   private List<string> scenes_loaded_;
   private GameState current_state_ = GameState.PREGAME;
-  AudioSource audio_background_player_;
-  AudioSource audio_clip_player_;
   [SerializeField]
   private AudioClip button_click_clip_ = null;
-  private AudioClip oneshot_repeat_clip_ = null;
   private Document document_;
   #endregion
 
   #region UnityFuncs
   private void Awake() {
-    audio_background_player_ = Instance.gameObject.AddComponent<AudioSource>();
-    audio_clip_player_ = Instance.gameObject.AddComponent<AudioSource>();
     document_ = Document.Instance;
   }
 
@@ -46,11 +41,6 @@ public class GameManager : Singleton<GameManager> {
     if (Input.GetKeyUp(KeyCode.Escape)) {
       TogglePause();
     }
-    AudioRepeat();
-  }
-
-  void FixedUpdate() {
-    AudioRepeat();
   }
 
   void OnApplicationPause(bool pause) {
@@ -71,13 +61,7 @@ public class GameManager : Singleton<GameManager> {
         UpdateState(GameState.RUNNING);
         break;
       case EventNames.BUTTON_CLICK: {
-        if(document_.UserSettingsInfo.SoundEnable) {
-            audio_clip_player_.PlayOneShot(button_click_clip_);
-          }
-        }
-        break;
-      case EventNames.PLAY_AUDIO: {
-          PlayAudio((PlayAudioEventArgs)gameEvent);
+          SoundManager.Instance.PlayClip(button_click_clip_);
         }
         break;
       case EventNames.RESUME:
@@ -85,40 +69,10 @@ public class GameManager : Singleton<GameManager> {
         break;
       case EventNames.SHOW_MENU:
         UnloadAll();
-        oneshot_repeat_clip_ = null;
-        audio_clip_player_.Stop();
         break;
       case EventNames.QUIT:
         QuitGame();
         break;
-    }
-  }
-
-  private void PlayAudio(PlayAudioEventArgs eventArgs) {
-    if(eventArgs.IsDefaultMusic) {
-      if (document_.UserSettingsInfo.MusicEnable) {
-        if(eventArgs.Clip != null && !eventArgs.IsStop) {
-          audio_background_player_.clip = eventArgs.Clip;
-          audio_background_player_.PlayOneShot(eventArgs.Clip);
-        } else if(eventArgs.IsStop) {
-          audio_background_player_.Stop();
-        } else {
-          if(audio_background_player_.clip != null) {
-            audio_background_player_.Play();
-          }
-        }
-      } else if(eventArgs.IsStop) {
-        audio_background_player_.Stop();
-      } else if(eventArgs.Clip != null) {
-        audio_background_player_.clip = eventArgs.Clip;
-      }
-    } else {
-      if (document_.UserSettingsInfo.SoundEnable) {
-        if(eventArgs.Clip != null) {
-          oneshot_repeat_clip_ = eventArgs.IsRepeat ? eventArgs.Clip : null;
-          audio_clip_player_.PlayOneShot(eventArgs.Clip);
-        }
-      }
     }
   }
 
@@ -164,19 +118,6 @@ public class GameManager : Singleton<GameManager> {
   #endregion
 
   #region ProcessInternalEvent
-  private void AudioRepeat() {
-    if (oneshot_repeat_clip_ != null && !
-      audio_clip_player_.isPlaying &&
-      document_.UserSettingsInfo.SoundEnable) {
-      audio_clip_player_.PlayOneShot(oneshot_repeat_clip_);
-    }
-    if(audio_background_player_.clip != null && 
-      !audio_background_player_.isPlaying &&
-      document_.UserSettingsInfo.MusicEnable) {
-      audio_background_player_.Play();
-    }
-  }
-
   private void UpdateState(GameState state) {
     GameState previousGameState = current_state_;
     current_state_ = state;

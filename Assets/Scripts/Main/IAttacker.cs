@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IAttacker {
   string Name { get; }
+  IVictim Target { get; set; }
   bool CanAttach { get; set; }
   void OnAttach(IVictim victim);
 }

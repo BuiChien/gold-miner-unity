@@ -35,10 +35,6 @@ public class GoodsController : GameScript, IVictim {
     RegisterGameEventController();
   }
 
-  void Update() {
-
-  }
-
   private void OnTriggerEnter2D(Collider2D collision) {
     GameObject gameObject = collision.gameObject;
     IAttacker attacker = gameObject.GetComponent<IAttacker>();

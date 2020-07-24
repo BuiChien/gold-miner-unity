@@ -43,6 +43,7 @@ public class GameController : MonoBehaviour {
   private GameObject pickup_item_prefab_ = null;
   private Document document_;
   private bool level_finished_;
+  private SoundManager sound_manager_;
   #endregion
   #region UnityFuncs
   void Awake() {
@@ -51,6 +52,7 @@ public class GameController : MonoBehaviour {
     hook_area_.GameEvent.AddListener(OnGameEventHandler);
     player_.GameEvent.AddListener(OnGameEventHandler);
     document_ = Document.Instance;
+    sound_manager_ = SoundManager.Instance;
   }
 
   void Start() {
@@ -75,7 +77,7 @@ public class GameController : MonoBehaviour {
     } else {
       status_panel_.TimeCounter = document_.Counter;
       if(document_.Counter <= 10) {
-        NotifyEvent(new PlayAudioEventArgs(timeup_count_audio_, true));
+        sound_manager_.PlayClip(timeup_count_audio_);
       }
     }
   }
@@ -87,14 +89,14 @@ public class GameController : MonoBehaviour {
     yield return new WaitForSeconds(1f);
     popup_menu_.HideLevelTarget();
     document_.StartTimer();
-    NotifyEvent(new PlayAudioEventArgs(background_audio_clip_, true, false, true));
+    sound_manager_.PlayBackground(background_audio_clip_);
     yield return null;
   }
 
   private IEnumerator FinishLevel() {
     document_.FinishLevel();
     popup_menu_.ShowLevelComplete(document_.IsVictory, document_.TotalScore);
-    NotifyEvent(new PlayAudioEventArgs(false, true));
+    sound_manager_.StopClip();
     yield return null;
   }
 
@@ -107,7 +109,7 @@ public class GameController : MonoBehaviour {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
           inventory_.CanUse = true;
           document_.SetScoreAmount(attachEvent.Victim);
-          NotifyEvent(new PlayAudioEventArgs(pulling_audio_, true));
+          sound_manager_.PlayRepeatClip(pulling_audio_);
           if (attachEvent.Victim.IsHeavy) {
             player_.HookSpeed = document_.HookHeavySpeed;
             player_.PullHeavy();
@@ -174,16 +176,18 @@ public class GameController : MonoBehaviour {
         clip = catch_victim_high_score_audio_;
         break;
     }
-    NotifyEvent(new PlayAudioEventArgs(clip));
+    sound_manager_.StopRepeatClip(pulling_audio_);
+    sound_manager_.PlayClip(clip);
   }
 
   private void OnGameStateChanged(StateChangedEventArgs gameEvent) {
     switch ((GameState)gameEvent.NextState) {
       case GameState.RUNNING:
+        Time.timeScale = 1.0f;
         document_.ResumeLevel();
         break;
       case GameState.PAUSED:
-        NotifyEvent(new PlayAudioEventArgs(false, true));
+        Time.timeScale = 0.0f;
         document_.PauseLevel();
         break;
       default:

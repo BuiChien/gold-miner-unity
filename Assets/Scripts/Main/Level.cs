@@ -9,10 +9,6 @@ public class Level : MonoBehaviour {
     spawner_ = gameObject.GetComponent<Spawner>();
   }
 
-  void Update() {
-
-  }
-
   public void LoadLevel(int level, int targetScore) {
     spawner_.Spawn(level, targetScore);
   }
