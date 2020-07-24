@@ -38,7 +38,9 @@ public class GameController : MonoBehaviour {
   [SerializeField]
   private Waypoint[] bomb_waypoints_;
   [SerializeField]
-  private AudioClip background_audio_clip_ = null;
+  private AudioClip background_audio_clip_ = null; 
+  [SerializeField]
+  private GameObject pickup_item_prefab_ = null;
   private Document document_;
   private bool level_finished_;
   #endregion
@@ -122,21 +124,31 @@ public class GameController : MonoBehaviour {
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
         break;
-      case EventNames.USE_ITEM_PICKUP:
-        OnUseItemPickupHandler((UseItemPickupEventArgs)gameEvent);
+      case EventNames.BUTTON_CLICK:
+        OnButtonEventHandler((ButtonEventArgs)gameEvent);
         break;
       default:
         break;
     }
   }
 
+  private void OnButtonEventHandler(ButtonEventArgs buttonEvent) {
+    switch (buttonEvent.ButtonName) {
+      case EventNames.USE_ITEM_PICKUP:
+        OnUseItemPickupHandler((UseItemPickupEventArgs)buttonEvent);
+        break;
+    }
+  }
+
   private void OnUseItemPickupHandler(UseItemPickupEventArgs gameEvent) {
+    GameObject obj;
     switch (gameEvent.UseItem.Type) {
       case ItemPickupType.BOMB:
-        GameObject bomb = new GameObject();
-        Image image = bomb.AddComponent<Image>();
-        image.sprite = gameEvent.UseItem.Icon;
-        Bomb bObj = bomb.AddComponent<Bomb>();
+        obj = Instantiate(pickup_item_prefab_, player_.transform);
+        obj.GetComponent<SpriteRenderer>().sprite = gameEvent.UseItem.InventoryIcon;
+        obj.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        Bomb bObj = obj.AddComponent<Bomb>();
+        obj.GetComponent<BoxCollider2D>().size = obj.GetComponent<SpriteRenderer>().sprite.rect.size;
         bObj.Waypoints = bomb_waypoints_;
         bObj.Target = player_.Victim;
         break;

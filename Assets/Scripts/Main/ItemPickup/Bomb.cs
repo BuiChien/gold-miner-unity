@@ -11,6 +11,8 @@ public class Bomb : MonoBehaviour, IAttacker {
   public IVictim Target { 
     get => target_;
     set {
+      target_ = value;
+      transform.position = Waypoints[0].transform.position;
       StartCoroutine(FollowTarget());
     }
   }
@@ -34,11 +36,14 @@ public class Bomb : MonoBehaviour, IAttacker {
     int next_pos = current_pos_ + 1;
     Vector3 startPoint = Waypoints[current_pos_].transform.position;
     Vector3 endPoint = Waypoints[next_pos].transform.position;
+    float count = 0;
     while (target_ != null) {
       if(transform.position != endPoint) {
-        transform.position = Vector3.Lerp(startPoint, endPoint, Time.deltaTime);
+        count += Time.deltaTime;
+        transform.position = Vector3.Lerp(startPoint, endPoint, count * 3);
       } else {
-        if(next_pos < Waypoints.Length - 1) {
+        count = 0;
+        if (next_pos < Waypoints.Length - 1) {
           current_pos_++;
           next_pos++;
           startPoint = Waypoints[current_pos_].transform.position;
