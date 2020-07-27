@@ -6,9 +6,9 @@ using UnityEngine;
 public class Hook : MonoBehaviour, IAttacker {
   public const string MyName = "Hook";
   internal class HookState {
-    public const string IDLE = "Idle";
-    public const string DROP = "Drop";
-    public const string PULL = "Pull";
+    public const int IDLE = 1;
+    public const int DROP = 2;
+    public const int PULL = 3;
   }
   public float Speed { get; set; }
   public IVictim Target { get; set; }
@@ -21,7 +21,7 @@ public class Hook : MonoBehaviour, IAttacker {
   [SerializeField]
   public Transform original_coordinates_;
 
-  public bool IsIdle { get => state_machine_.StateName.Equals(HookState.IDLE); }
+  public bool IsIdle { get => state_machine_.StateId.Equals(HookState.IDLE); }
 
   private StateMachine state_machine_;
   private bool can_attach_;
@@ -97,13 +97,13 @@ public class Hook : MonoBehaviour, IAttacker {
   }
 
   public void Drop() {
-    if(state_machine_.StateName == HookState.IDLE) {
+    if(state_machine_.StateId == HookState.IDLE) {
       state_machine_.ChangeState(HookState.DROP);
     }
   }
 
   public void Pull() {
-    if (state_machine_.StateName == HookState.DROP) {
+    if (state_machine_.StateId == HookState.DROP) {
       state_machine_.ChangeState(HookState.PULL);
     }
   }
@@ -119,7 +119,7 @@ public class Hook : MonoBehaviour, IAttacker {
   }
 
   public void Abort() {
-    if (state_machine_.StateName != HookState.IDLE) {
+    if (state_machine_.StateId != HookState.IDLE) {
       state_machine_.ChangeState(HookState.IDLE);
     }
     if(Target != null) {

@@ -7,12 +7,13 @@ public class Player : GameScript {
   [SerializeField]
   private PlayerSo character_;
   class PlayerState {
-    public const string IDLE          = "Idle";
-    public const string DROP_HOOK     = "DropHook";
-    public const string PULL          = "Pull";
-    public const string PULL_HEAVY    = "PullHeavy";
-    public const string ANGRY         = "Angry";
-    public const string HAPPY         = "Happy";
+    public const int IDLE          = 1;
+    public const int DROP_HOOK     = 2;
+    public const int PULL          = 3;
+    public const int PULL_HEAVY    = 4;
+    public const int DROP_BOMB     = 5;
+    public const int ANGRY         = 6;
+    public const int HAPPY         = 7;
   }
   public float HookSpeed {
     set {
@@ -31,6 +32,7 @@ public class Player : GameScript {
 
   void Start() {
     IsAbort = false;
+    animimator_ = GetComponent<Animator>();
     state_machine_ = new StateMachine();
     state_machine_.AddState(PlayerState.IDLE, () => {
       rod_.CanAttach = true;
@@ -41,7 +43,7 @@ public class Player : GameScript {
       rod_.DropHook();
     }, (e) => {
       if(rod_.IsIdle) {
-        state_machine_.ChangeState(PlayerState.IDLE);
+        OnChangeState(PlayerState.IDLE);
       }
     });
     state_machine_.AddState(PlayerState.PULL, () => {
@@ -49,10 +51,10 @@ public class Player : GameScript {
     }, (e) => {
       if(rod_.IsIdle) {
         if (rod_.CanAttach) {
-          state_machine_.ChangeState(PlayerState.HAPPY);
+          OnChangeState(PlayerState.HAPPY);
           NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
         } else {
-          state_machine_.ChangeState(PlayerState.IDLE);
+          OnChangeState(PlayerState.IDLE);
         }
       }
     });
@@ -61,10 +63,10 @@ public class Player : GameScript {
     }, (e) => {
       if (rod_.IsIdle) {
         if(rod_.CanAttach) {
-          state_machine_.ChangeState(PlayerState.ANGRY);
+          OnChangeState(PlayerState.ANGRY);
           NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
         } else {
-          state_machine_.ChangeState(PlayerState.IDLE);
+          OnChangeState(PlayerState.IDLE);
         }
       }
     });
@@ -78,7 +80,7 @@ public class Player : GameScript {
     }, (e) => {
       //Do nothing
     });
-    state_machine_.ChangeState(PlayerState.IDLE);
+    OnChangeState(PlayerState.IDLE);
   }
 
   void Update() {
@@ -96,8 +98,8 @@ public class Player : GameScript {
   }
 
   public void DropHook() {
-    if(state_machine_.StateName == PlayerState.IDLE) {
-      state_machine_.ChangeState(PlayerState.DROP_HOOK);
+    if(state_machine_.StateId == PlayerState.IDLE) {
+      OnChangeState(PlayerState.DROP_HOOK);
     }
   }
 
@@ -111,40 +113,45 @@ public class Player : GameScript {
   }
 
   public void Pull() {
-    if (state_machine_.StateName == PlayerState.DROP_HOOK) {
-      state_machine_.ChangeState(PlayerState.PULL);
+    if (state_machine_.StateId == PlayerState.DROP_HOOK) {
+      OnChangeState(PlayerState.PULL);
     }
   }
 
   public void PullHeavy() {
-    if (state_machine_.StateName == PlayerState.DROP_HOOK) {
-      state_machine_.ChangeState(PlayerState.PULL);
+    if (state_machine_.StateId == PlayerState.DROP_HOOK) {
+      OnChangeState(PlayerState.PULL);
     }
   }
 
   public void Angry() {
-    if (state_machine_.StateName == PlayerState.PULL_HEAVY) {
-      state_machine_.ChangeState(PlayerState.ANGRY);
+    if (state_machine_.StateId == PlayerState.PULL_HEAVY) {
+      OnChangeState(PlayerState.ANGRY);
     }
   }
 
   public void Happy() {
-    if (state_machine_.StateName == PlayerState.PULL) {
-      state_machine_.ChangeState(PlayerState.HAPPY);
+    if (state_machine_.StateId == PlayerState.PULL) {
+      OnChangeState(PlayerState.HAPPY);
     }
   }
 
   private IEnumerator OnAnimationHandler() {
     yield return new WaitForSeconds(1f);
-    switch (state_machine_.StateName) {
+    switch (state_machine_.StateId) {
       case PlayerState.HAPPY:
-        state_machine_.ChangeState(PlayerState.IDLE);
+        OnChangeState(PlayerState.IDLE);
         break;
       case PlayerState.ANGRY:
-        state_machine_.ChangeState(PlayerState.IDLE);
+        OnChangeState(PlayerState.IDLE);
         break;
       default:
         break;
     }
+  }
+
+  private void OnChangeState(int stateId) {
+    animimator_.SetInteger("State", stateId);
+    state_machine_.ChangeState(stateId);
   }
 }

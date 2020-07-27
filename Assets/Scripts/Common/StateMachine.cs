@@ -4,31 +4,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StateEntity {
-  public string Name { get; private set; }
+  public int Id { get; private set; }
   public Action Enter { get; private set; }
   public Action<GameEventArgs> Update { get; private set; }
-  public StateEntity(string name, Action enter, Action<GameEventArgs> update) {
-    Name = name;
+  public StateEntity(int id, Action enter, Action<GameEventArgs> update) {
+    Id = id;
     Enter = enter;
     Update = update;
   }
 }
 
 public class StateMachine {
-  private Dictionary<string, StateEntity> state_dict_ = new Dictionary<string, StateEntity>();
+  private Dictionary<int, StateEntity> state_dict_ = new Dictionary<int, StateEntity>();
   private StateEntity current_state_;
 
-  public string StateName {
+  public int StateId {
     get { 
-      return current_state_ != null ? current_state_.Name : string.Empty; 
+      return current_state_ != null ? current_state_.Id : -1; 
     } 
   }
-  public void AddState(string name, Action enter, Action<GameEventArgs> update) {
-    if(state_dict_.ContainsKey(name)) {
+  public void AddState(int id, Action enter, Action<GameEventArgs> update) {
+    if(state_dict_.ContainsKey(id)) {
       throw new ArgumentException();
     }
-    StateEntity state = new StateEntity(name, enter, update);
-    state_dict_.Add(name, state);
+    StateEntity state = new StateEntity(id, enter, update);
+    state_dict_.Add(id, state);
   }
 
   public void ProcessEvent(GameEventArgs gameEvent) {
@@ -37,9 +37,9 @@ public class StateMachine {
     }
   }
 
-  public void ChangeState(string name) {
-    if(state_dict_.ContainsKey(name)) {
-      current_state_ = state_dict_[name];
+  public void ChangeState(int Id) {
+    if(state_dict_.ContainsKey(Id)) {
+      current_state_ = state_dict_[Id];
       current_state_.Enter();
     } else {
       throw new ArgumentException();
