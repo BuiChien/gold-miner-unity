@@ -52,7 +52,7 @@ public class Hook : MonoBehaviour, IAttacker {
 
     state_machine_.AddState(HookState.DROP, () => {
       CalculateVelocity();
-      GetComponent<Rigidbody2D>().velocity = velocity_ * Speed;
+      GetComponent<Rigidbody2D>().velocity = velocity_ * 6;
     }, (e) => {
       // hook is out of cammera view, move to pull state
       if (IsVisible == false) {

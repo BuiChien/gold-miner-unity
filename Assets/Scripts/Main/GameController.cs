@@ -77,7 +77,7 @@ public class GameController : MonoBehaviour {
     } else {
       status_panel_.TimeCounter = document_.Counter;
       if(document_.Counter <= 10) {
-        sound_manager_.PlayClip(timeup_count_audio_);
+        sound_manager_.PlayRepeatClip(timeup_count_audio_);
       }
     }
   }
@@ -97,6 +97,7 @@ public class GameController : MonoBehaviour {
     document_.FinishLevel();
     popup_menu_.ShowLevelComplete(document_.IsVictory, document_.TotalScore);
     sound_manager_.StopClip();
+    sound_manager_.StopAllRepeatClip();
     yield return null;
   }
 
@@ -146,6 +147,7 @@ public class GameController : MonoBehaviour {
     GameObject obj;
     switch (gameEvent.UseItem.Type) {
       case ItemPickupType.BOMB:
+        sound_manager_.StopRepeatClip(pulling_audio_);
         obj = Instantiate(pickup_item_prefab_, player_.transform);
         obj.GetComponent<SpriteRenderer>().sprite = gameEvent.UseItem.InventoryIcon;
         obj.GetComponent<SpriteRenderer>().sortingOrder = 1;

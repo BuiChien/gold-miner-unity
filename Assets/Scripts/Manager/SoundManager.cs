@@ -20,7 +20,7 @@ public class SoundManager : Singleton<SoundManager> {
     }
     background_player_.clip = clip;
     background_player_.loop = true;
-    background_player_.volume = 0.6f;
+    background_player_.volume = 0.5f;
     if (document_.UserSettingsInfo.MusicEnable) {
       background_player_.Play();
     }
@@ -45,7 +45,19 @@ public class SoundManager : Singleton<SoundManager> {
     if(isOverride) {
       clip_player_.Stop();
     }
-    clip_player_.PlayOneShot(clip);
+    clip_player_.PlayOneShot(clip, 1.0f);
+  }
+
+  public void PauseClip() {
+    if(clip_player_.isPlaying) {
+      clip_player_.Pause();
+    }
+  }
+
+  public void ResumeClip() {
+    if (clip_player_.isPlaying) {
+      clip_player_.Play();
+    }
   }
 
   public void PlayRepeatClip(AudioClip clip) {
@@ -53,6 +65,7 @@ public class SoundManager : Singleton<SoundManager> {
       AudioSource audio = gameObject.AddComponent<AudioSource>();
       audio.clip = clip;
       audio.loop = true;
+      audio.volume = 1.0f;
       audio.Play();
       clip_repeat_players_.Add(clip.name, audio);
     } else {
