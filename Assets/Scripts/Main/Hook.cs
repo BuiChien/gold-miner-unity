@@ -24,23 +24,13 @@ public class Hook : MonoBehaviour, IAttacker {
   public bool IsIdle { get => state_machine_.StateId.Equals(HookState.IDLE); }
 
   private StateMachine state_machine_;
-  private bool can_attach_;
   private bool IsVisible {
     get => gameObject.GetComponent<Renderer>().isVisible;
   }
-  public bool CanAttach {
-    get => can_attach_;
-    set {
-      can_attach_ = value;
-      if(!can_attach_) {
-        Target = null;
-      }
-    }
-  }
+
   public string Name { get => MyName; }
 
   void Start() {
-    can_attach_ = true;
     state_machine_ = new StateMachine();
     state_machine_.AddState(HookState.IDLE, () => {
       hook_.SetActive(true);
@@ -72,8 +62,6 @@ public class Hook : MonoBehaviour, IAttacker {
     }, (e) => {
       if(Target != null) {
         Target.DragAway(transform);
-      } else {
-        GetComponent<Rigidbody2D>().velocity = velocity_ * Speed * 5;
       }
       if (transform.localPosition.y > original_position_.y) {
         GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -116,6 +104,16 @@ public class Hook : MonoBehaviour, IAttacker {
 
   public void OnAttach(IVictim victim) {
     Target = victim;
+  }
+
+  public void CancelAttach() {
+    if(state_machine_.StateId != HookState.PULL) {
+      return;
+    }
+    Target = null;
+    CalculateVelocity();
+    velocity_ = -velocity_;
+    GetComponent<Rigidbody2D>().velocity = velocity_ * Speed * 5;
   }
 
   public void Abort() {

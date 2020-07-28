@@ -160,7 +160,7 @@ public class GameController : MonoBehaviour {
         break;
     }
     document_.UseItemPickup(gameEvent.UseItem);
-    player_.UseWeapons();
+    player_.UseWeapons(gameEvent.UseItem.Type);
   }
 
   private void OnPullSuccess() {

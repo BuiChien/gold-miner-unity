@@ -23,19 +23,16 @@ public class Player : GameScript {
 
   public IVictim Victim => rod_.Victim;
 
-  [SerializeField]
   private Animator animimator_;
   [SerializeField]
   private Rod rod_;
   private StateMachine state_machine_;
-  public bool IsAbort { get; private set; }
 
   void Start() {
-    IsAbort = false;
     animimator_ = GetComponent<Animator>();
     state_machine_ = new StateMachine();
     state_machine_.AddState(PlayerState.IDLE, () => {
-      rod_.CanAttach = true;
+
     }, (e) => {
       //Do nothing
     });
@@ -50,24 +47,23 @@ public class Player : GameScript {
       rod_.PullHook();
     }, (e) => {
       if(rod_.IsIdle) {
-        if (rod_.CanAttach) {
-          OnChangeState(PlayerState.HAPPY);
-          NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
-        } else {
-          OnChangeState(PlayerState.IDLE);
-        }
+        OnChangeState(PlayerState.HAPPY);
+        NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
       }
     });
     state_machine_.AddState(PlayerState.PULL_HEAVY, () => {
       rod_.PullHook();
     }, (e) => {
       if (rod_.IsIdle) {
-        if(rod_.CanAttach) {
-          OnChangeState(PlayerState.ANGRY);
-          NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
-        } else {
-          OnChangeState(PlayerState.IDLE);
-        }
+        OnChangeState(PlayerState.ANGRY);
+        NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
+      }
+    });
+    state_machine_.AddState(PlayerState.DROP_BOMB, () => {
+      rod_.CancelAttach();
+    }, (e) => { 
+      if(rod_.IsIdle) {
+        OnChangeState(PlayerState.IDLE);
       }
     });
     state_machine_.AddState(PlayerState.ANGRY, () => {
@@ -84,16 +80,10 @@ public class Player : GameScript {
   }
 
   void Update() {
-    if(IsAbort) {
-      return;
-    }
     state_machine_.ProcessEvent(null);
   }
 
   void FixedUpdate() {
-    if (IsAbort) {
-      return;
-    }
     state_machine_.ProcessEvent(null);
   }
 
@@ -103,12 +93,14 @@ public class Player : GameScript {
     }
   }
 
-  public void UseWeapons() {
-    rod_.CanAttach = false;
+  public void UseWeapons(ItemPickupType type) {
+    if(type.Equals(ItemPickupType.BOMB)) {
+      OnChangeState(PlayerState.DROP_BOMB);
+    }
   }
 
   public void Abort() {
-    IsAbort = true;
+    OnChangeState(PlayerState.IDLE);
     rod_.Abort();
   }
 

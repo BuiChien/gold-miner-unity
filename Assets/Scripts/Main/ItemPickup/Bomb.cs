@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour, IAttacker {
   public const string MyName = "Bomb";
-  public bool CanAttach { get; set; }
   public string Name { get => MyName; }
   public Waypoint[] Waypoints;
   private int current_pos_;
@@ -21,7 +20,6 @@ public class Bomb : MonoBehaviour, IAttacker {
   void Start() {
     current_pos_ = 0;
     transform.position = Waypoints[current_pos_].transform.position;
-    CanAttach = true;
   }
 
   public void OnAttach(IVictim victim) {
@@ -57,5 +55,9 @@ public class Bomb : MonoBehaviour, IAttacker {
       yield return null;
     }
     yield return null;
+  }
+
+  public void CancelAttach() {
+
   }
 }
