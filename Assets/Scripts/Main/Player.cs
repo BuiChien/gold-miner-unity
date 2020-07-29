@@ -112,7 +112,7 @@ public class Player : GameScript {
 
   public void PullHeavy() {
     if (state_machine_.StateId == PlayerState.DROP_HOOK) {
-      OnChangeState(PlayerState.PULL);
+      OnChangeState(PlayerState.PULL_HEAVY);
     }
   }
 
