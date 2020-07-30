@@ -148,7 +148,9 @@ public class Document : Singleton<Document> {
           ScoreAmount = victim.ScoreAmount;
         }
         break;
-      case "Diamond":
+      case "DiamondGold":
+      case "DiamondYellow":
+      case "DiamondViolet":
         if (bought_item_dict_.ContainsKey(ItemPickupType.DIAMOND)) {
           ScoreAmount = victim.ScoreAmount + 100;
         } else {
@@ -222,7 +224,7 @@ public class Document : Singleton<Document> {
   }
 
   private void LoadBomb() {
-    int bombCount = operation_data_.BombCount;
+    int bombCount = 4;//operation_data_.BombCount;
     if (bombCount > 0) {
       BuyPickupItem(PickupSos.Find(x => x.Type == ItemPickupType.BOMB), 0, bombCount);
     }

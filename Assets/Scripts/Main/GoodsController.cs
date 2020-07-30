@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GoodsController : GameScript, IVictim {
-  internal class GoodState {
+  protected class GoodState {
     public const int IDLE = 1;
+    public const int RUN_OR_BLINK = 2;
     public const int EXPLODE = 5;
   }
   public GoodsSo character_;
@@ -27,20 +28,37 @@ public class GoodsController : GameScript, IVictim {
       GetComponent<SpriteRenderer>().sprite = value.Icon;
       transform.localScale = new Vector3(value.Scale, value.Scale, 0);
       collider_.SetPath(0, value.Icon.vertices);
-    } 
+      if(!string.IsNullOrEmpty(character_.Tag)) {
+        gameObject.tag = character_.Tag;
+      }
+    }
   }
 
   public Vector3 Position => transform.position;
   public ISpawner Spawner;
+  protected int state_;
   void Awake() {
-    tag = character_.Tag;
     collider_ = GetComponent<PolygonCollider2D>();
     animator_ = GetComponent<Animator>();
   }
 
   void Start() {
     RegisterGameEventController();
-    SetAnimation(GoodState.IDLE);
+    StartCoroutine(DoAnimation());
+  }
+
+  IEnumerator DoAnimation() {
+    if(state_ != GoodState.EXPLODE) {
+      SetAnimation(GoodState.IDLE);
+      yield return new WaitForSeconds(Random.Range(1, 3));
+      SetAnimation(GoodState.RUN_OR_BLINK);
+      yield return new WaitForSeconds(Random.Range(2, 5));
+      StartCoroutine(DoAnimation());
+    } else {
+      yield return new WaitForSeconds(0.8f);
+      Destroy(gameObject);
+      yield return null;
+    }
   }
 
   private void OnTriggerEnter2D(Collider2D collision) {
@@ -55,11 +73,12 @@ public class GoodsController : GameScript, IVictim {
   public virtual void Death(IAttacker attacker) {
     if(attacker.Name == Bomb.MyName) {
       SetAnimation(GoodState.EXPLODE);
+    } else {
+      Destroy(gameObject);
     }
     if(Spawner != null) {
       Spawner.OnSpawnableDestroy(gameObject);
     }
-    Destroy(gameObject);
   }
 
   public virtual void DragAway(Transform target) {
@@ -73,7 +92,8 @@ public class GoodsController : GameScript, IVictim {
   }
 
   private void SetAnimation(int state) {
-    if(animator_.runtimeAnimatorController != null) {
+    state_ = state;
+    if (animator_.runtimeAnimatorController != null) {
       animator_.SetInteger("State", state);
     }
   }
