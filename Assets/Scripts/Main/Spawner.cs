@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(AnimatorFactory))]
 public class Spawner : MonoBehaviour, ISpawner {
   [SerializeField]
   private GoodsSo[] common_goods_list_;
@@ -20,12 +20,14 @@ public class Spawner : MonoBehaviour, ISpawner {
   private int precious_max_score_;
   private int common_min_score_;
   private int common_max_score_;
+  private AnimatorFactory animator_factory_;
 
   public int Count => list_spawnable_.Count;
 
   void Awake() {
     UpdateMaxMin(common_goods_list_, ref common_max_score_, ref common_min_score_);
     UpdateMaxMin(precious_goods_list_, ref precious_max_score_, ref precious_min_score_);
+    animator_factory_ = GetComponent<AnimatorFactory>();
     list_spawnable_ = new List<GameObject>();
   }
 
@@ -72,6 +74,7 @@ public class Spawner : MonoBehaviour, ISpawner {
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, precious_material_zone_.transform);
       spawnObj.GetComponent<GoodsController>().Spawner = this;
       spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      spawnObj.GetComponent<Animator>().runtimeAnimatorController = animator_factory_.Create(spawnObj.tag);
       list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;
     }
@@ -94,6 +97,7 @@ public class Spawner : MonoBehaviour, ISpawner {
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
       spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
       spawnObj.GetComponent<GoodsController>().Spawner = this;
+      spawnObj.GetComponent<Animator>().runtimeAnimatorController = animator_factory_.Create(spawnObj.tag);
       list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;
     }

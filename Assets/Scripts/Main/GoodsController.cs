@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GoodsController : GameScript, IVictim {
+  internal class GoodState {
+    public const int IDLE = 1;
+    public const int EXPLODE = 5;
+  }
   public GoodsSo character_;
   public int ScoreAmount {
     get => character_.ScoreAmount; 
@@ -16,6 +20,7 @@ public class GoodsController : GameScript, IVictim {
     get => character_.IsHeavy;
   }
   private PolygonCollider2D collider_;
+  private Animator animator_;
   public GoodsSo Character {
     set {
       character_ = value;
@@ -28,11 +33,14 @@ public class GoodsController : GameScript, IVictim {
   public Vector3 Position => transform.position;
   public ISpawner Spawner;
   void Awake() {
+    tag = character_.Tag;
     collider_ = GetComponent<PolygonCollider2D>();
+    animator_ = GetComponent<Animator>();
   }
 
   void Start() {
     RegisterGameEventController();
+    SetAnimation(GoodState.IDLE);
   }
 
   private void OnTriggerEnter2D(Collider2D collision) {
@@ -46,7 +54,7 @@ public class GoodsController : GameScript, IVictim {
 
   public virtual void Death(IAttacker attacker) {
     if(attacker.Name == Bomb.MyName) {
-      //TODO:
+      SetAnimation(GoodState.EXPLODE);
     }
     if(Spawner != null) {
       Spawner.OnSpawnableDestroy(gameObject);
@@ -62,5 +70,11 @@ public class GoodsController : GameScript, IVictim {
     transform.position = new Vector3(target.position.x,
                                         target.position.y - gameObject.GetComponent<Collider2D>().bounds.size.y / 3,
                                         transform.position.z);
+  }
+
+  private void SetAnimation(int state) {
+    if(animator_.runtimeAnimatorController != null) {
+      animator_.SetInteger("State", state);
+    }
   }
 }

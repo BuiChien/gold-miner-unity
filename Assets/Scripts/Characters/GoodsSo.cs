@@ -21,7 +21,6 @@ public enum GoodsType {
 public class GoodsSo : ScriptableObject {
   public GoodsType Type;
   public Sprite Icon;
-  public Animator GoodsAnimator;
   public float Scale;
   public bool IsHeavy;
   public int ScoreAmount;
