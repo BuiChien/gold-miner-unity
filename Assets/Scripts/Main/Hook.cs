@@ -21,6 +21,7 @@ public class Hook : MonoBehaviour, IAttacker {
   private Vector2 velocity_;
   [SerializeField]
   public Transform original_coordinates_;
+  private bool pull_without_victim_;
 
   public bool IsIdle { get => state_machine_.StateId.Equals(HookState.IDLE); }
 
@@ -44,9 +45,11 @@ public class Hook : MonoBehaviour, IAttacker {
     state_machine_.AddState(HookState.DROP, () => {
       CalculateVelocity();
       GetComponent<Rigidbody2D>().velocity = velocity_ * 6;
+      pull_without_victim_ = false;
     }, (e) => {
       // hook is out of cammera view, move to pull state
       if (IsVisible == false) {
+        pull_without_victim_ = true;
         state_machine_.ChangeState(HookState.PULL);
       }
     });
@@ -116,12 +119,17 @@ public class Hook : MonoBehaviour, IAttacker {
     velocity_.Normalize();
   }
 
-  public void OnAttach(IVictim victim) {
-    Target = victim;
+  public bool OnAttach(IVictim victim) {
+    bool isOk = !pull_without_victim_ && Target == null;
+    if(isOk) {
+      Target = victim;
+    }
+    return isOk;
   }
 
   public void CancelAttach() {
     if(state_machine_.StateId == HookState.PULL) {
+      Target = null;
       state_machine_.ChangeState(HookState.CANCEL);
     }
   }

@@ -22,12 +22,13 @@ public class Bomb : MonoBehaviour, IAttacker {
     transform.position = Waypoints[current_pos_].transform.position;
   }
 
-  public void OnAttach(IVictim victim) {
+  public bool OnAttach(IVictim victim) {
     if(Target == victim) {
       target_ = null;
       victim.Death(this);
       Destroy(gameObject, 0.5f);
     }
+    return true;
   }
 
   IEnumerator FollowTarget() {

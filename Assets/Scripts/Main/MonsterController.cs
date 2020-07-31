@@ -35,18 +35,7 @@ public class MonsterController : GoodsController {
   }
 
   protected override IEnumerator DoAnimation() {
-    while (true) {
-      if (state_ == GoodState.EXPLODE) {
-        yield return new WaitForSeconds(0.5f);
-        break;
-      } else if (state_ == GoodState.IDLE) {
-        SetAnimation(GoodState.RUN_OR_BLINK);
-        yield return new WaitForSeconds(Random.Range(1, 3));
-      } else if (state_ == GoodState.RUN_OR_BLINK) {
-        SetAnimation(GoodState.IDLE);
-        yield return new WaitForSeconds(Random.Range(2, 5));
-      }
-    }
+    yield return new WaitForSeconds(0.5f);
     Destroy(gameObject);
   }
 
@@ -54,11 +43,21 @@ public class MonsterController : GoodsController {
     GameObject gameObject = collision.gameObject;
     IAttacker attacker = gameObject.GetComponent<IAttacker>();
     if (attacker != null) {
-      attacker.OnAttach(this);
-      BroadcastEvent(new AttachEventArgs(attacker, this));
-      SetAnimation(GoodState.IDLE);
+      if(attacker.OnAttach(this)) {
+        BroadcastEvent(new AttachEventArgs(attacker, this));
+        if (attacker.Name.Equals(Hook.MyName)) {
+          SetAnimation(GoodState.IDLE);
+        }
+      }
     } else {
       run_direction_ = -run_direction_;
+    }
+  }
+
+  public override void Death(IAttacker attacker) {
+    base.Death(attacker);
+    if(state_.Equals(GoodState.EXPLODE)) {
+      StartCoroutine(DoAnimation());
     }
   }
 }

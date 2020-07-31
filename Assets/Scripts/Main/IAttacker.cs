@@ -6,5 +6,5 @@ public interface IAttacker {
   string Name { get; }
   IVictim Target { get; set; }
   void CancelAttach();
-  void OnAttach(IVictim victim);
+  bool OnAttach(IVictim victim);
 }
