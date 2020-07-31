@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(AnimatorFactory))]
 public class Spawner : MonoBehaviour, ISpawner {
+  public int MinLevelSpawnMonster = 10;
   [SerializeField]
   private GoodsSo[] common_goods_list_;
   [SerializeField]
@@ -22,6 +23,8 @@ public class Spawner : MonoBehaviour, ISpawner {
   private int precious_max_score_;
   private int common_min_score_;
   private int common_max_score_;
+  private int monster_min_score_;
+  private int monster_max_score_;
   private AnimatorFactory animator_factory_;
 
   public int Count => list_spawnable_.Count;
@@ -29,6 +32,7 @@ public class Spawner : MonoBehaviour, ISpawner {
   void Awake() {
     UpdateMaxMin(common_goods_list_, ref common_max_score_, ref common_min_score_);
     UpdateMaxMin(precious_goods_list_, ref precious_max_score_, ref precious_min_score_);
+    UpdateMaxMin(monster_list_, ref monster_max_score_, ref monster_min_score_);
     animator_factory_ = GetComponent<AnimatorFactory>();
     list_spawnable_ = new List<GameObject>();
   }
@@ -37,22 +41,24 @@ public class Spawner : MonoBehaviour, ISpawner {
     total_score_ = totalScore;
     level_ = level;
     SpawnPreciousZone();
-    //SpawnCommonZone();
     SpawnMonster();
+    SpawnCommonZone();
   }
 
   private void UpdateMaxMin(GoodsSo[] listGoods, ref int max, ref int min) {
     bool isFirst = true;
+    int compareValue;
     foreach (GoodsSo goods in listGoods) {
       if (isFirst) {
-        max = goods.ScoreAmount;
-        min = goods.ScoreAmount;
+        max = goods.MaxAmount > goods.ScoreAmount ? goods.MaxAmount : goods.ScoreAmount;
+        min = goods.MaxAmount > goods.ScoreAmount ? goods.MaxAmount : goods.ScoreAmount;
       } else {
-        if (max < goods.ScoreAmount) {
-          max = goods.ScoreAmount;
+        compareValue = goods.MaxAmount > goods.ScoreAmount ? goods.MaxAmount : goods.ScoreAmount;
+        if (max < compareValue) {
+          max = compareValue;
         }
-        if (min > goods.ScoreAmount) {
-          min = goods.ScoreAmount;
+        if (min > compareValue) {
+          min = compareValue;
         }
       }
     }
@@ -60,7 +66,12 @@ public class Spawner : MonoBehaviour, ISpawner {
 
   private void SpawnPreciousZone() {
     int scoreAmount = Random.Range(precious_min_score_, precious_max_score_);
-    int spawnNumber = Random.Range(1, total_score_ / scoreAmount);
+    int spawnNumber;
+    if (level_ <= MinLevelSpawnMonster) {
+      spawnNumber = total_score_ / scoreAmount;
+    } else {
+      spawnNumber = Random.Range(1, total_score_ / scoreAmount);
+    }
     int indexSpawn;
     GameObject spawnObj;
     Vector3 spawnPoint;
@@ -111,13 +122,18 @@ public class Spawner : MonoBehaviour, ISpawner {
   }
 
   private void SpawnMonster() {
+    if (level_ <= MinLevelSpawnMonster) {
+      return;
+    }
+    int scoreAmount = Random.Range(monster_min_score_, monster_max_score_);
+    int spawnNumber = Random.Range(1, total_score_ / scoreAmount);
     int indexSpawn;
-    GoodsSo spawnCharacter;
-    float radius;
-    Vector3 spawnPoint;
     GameObject spawnObj;
+    Vector3 spawnPoint;
+    GoodsSo spawnCharacter;
     GoodsController controller;
-    while (total_score_ > 0) {
+    float radius;
+    for (int i = 0; i < spawnNumber; i++) {
       indexSpawn = Random.Range(0, monster_list_.Length);
       spawnCharacter = monster_list_[indexSpawn];
       radius = spawnCharacter.Icon.bounds.extents.magnitude * spawnCharacter.Scale;

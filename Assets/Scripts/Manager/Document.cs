@@ -224,7 +224,7 @@ public class Document : Singleton<Document> {
   }
 
   private void LoadBomb() {
-    int bombCount = 4;//operation_data_.BombCount;
+    int bombCount = operation_data_.BombCount;
     if (bombCount > 0) {
       BuyPickupItem(PickupSos.Find(x => x.Type == ItemPickupType.BOMB), 0, bombCount);
     }
