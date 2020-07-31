@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 10
   Icon: {fileID: -2320711375495706950, guid: 7207b6c4046f1eb44ae8eb6db0e9be40, type: 3}
-  GoodsAnimator: {fileID: 0}
   Scale: 1
   IsHeavy: 0
   ScoreAmount: 60
+  MaxAmount: 0
+  Tag: Skullcap

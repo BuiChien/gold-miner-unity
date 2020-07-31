@@ -108,14 +108,16 @@ public class GameController : MonoBehaviour {
         break;
       case EventNames.ATTACK: {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
-          inventory_.CanUse = true;
-          document_.SetScoreAmount(attachEvent.Victim);
-          sound_manager_.PlayRepeatClip(pulling_audio_);
-          if (attachEvent.Victim.IsHeavy) {
-            player_.HookSpeed = document_.HookHeavySpeed;
-            player_.PullHeavy();
-          } else {
-            player_.Pull();
+          if(attachEvent.Attacker.Name.Equals(Hook.MyName)) {
+            inventory_.CanUse = true;
+            document_.SetScoreAmount(attachEvent.Victim);
+            sound_manager_.PlayRepeatClip(pulling_audio_);
+            if (attachEvent.Victim.IsHeavy) {
+              player_.HookSpeed = document_.HookHeavySpeed;
+              player_.PullHeavy();
+            } else {
+              player_.Pull();
+            }
           }
           break;
         }

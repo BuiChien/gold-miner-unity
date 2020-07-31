@@ -14,7 +14,11 @@ public enum GoodsType {
   DIAMOND_GREEN,
   DIAMOND_YELLOW,
   SKULLCAP,
-  BONE
+  BONE,
+  GIFT_BAG,
+  DOLAR_BAG,
+  MOUSE,
+  MOUSE_PLUS
 }
 
 [CreateAssetMenu(fileName = "NewGoodsStats", menuName = "Scriptable/Goods", order = 2)]
@@ -24,5 +28,6 @@ public class GoodsSo : ScriptableObject {
   public float Scale;
   public bool IsHeavy;
   public int ScoreAmount;
+  public int MaxAmount;
   public string Tag;
 }

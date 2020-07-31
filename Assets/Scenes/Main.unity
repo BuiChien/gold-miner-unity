@@ -1715,6 +1715,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6ecc17842f00f8b4091972cfd4bdd263, type: 2}
   - {fileID: 11400000, guid: 76e8853afcef5e1488981aabf0258785, type: 2}
   - {fileID: 11400000, guid: 725a94960539c46419fd26893a668bc0, type: 2}
+  - {fileID: 11400000, guid: 7dcf522f717f42c43b37cff761b00e72, type: 2}
+  - {fileID: 11400000, guid: a8c560ef6af7bb7488f5addfee8bff24, type: 2}
   precious_goods_list_:
   - {fileID: 11400000, guid: e2be70063d702954181f532b91e35564, type: 2}
   - {fileID: 11400000, guid: 80dba2207dbb86748bd6564685002027, type: 2}
@@ -1750,7 +1752,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animators:
   - {fileID: 9100000, guid: af7f9d393ae1613459321948c007ebdb, type: 2}
+  - {fileID: 9100000, guid: 3c1f80939bb570944a08ec4100757e08, type: 2}
+  - {fileID: 9100000, guid: d21ef565e6f93794089be702cfb7efb8, type: 2}
+  - {fileID: 9100000, guid: 1de1d03527b41f1418164899ca6ce66d, type: 2}
+  - {fileID: 9100000, guid: f605a10ace034d34188165948d74bb6d, type: 2}
+  - {fileID: 9100000, guid: bb5f6259824989448a6e58fcdf08047e, type: 2}
+  - {fileID: 9100000, guid: 68bde78b97f503342b5f81a9e554cf5a, type: 2}
+  - {fileID: 9100000, guid: 78bc0da29f3461d479e26100edd937ff, type: 2}
+  - {fileID: 9100000, guid: 831dabcbb4e1b3446abbbdd1b230df45, type: 2}
+  - {fileID: 9100000, guid: 2029196df522bac4b897c78e2000a3ef, type: 2}
   - {fileID: 9100000, guid: f9abe191030267e40b1fa38f2407688a, type: 2}
+  - {fileID: 9100000, guid: ed27c7e1d7db66a4fad94b04438ec619, type: 2}
+  - {fileID: 9100000, guid: 907da04296dbda04ea95c91b4e9129b8, type: 2}
+  - {fileID: 9100000, guid: a2eab6671e1f7c04c9702841117eade8, type: 2}
+  - {fileID: 9100000, guid: 033e1a8c7019ddc41876943ab5a6a812, type: 2}
 --- !u!1001 &759988871
 PrefabInstance:
   m_ObjectHideFlags: 0

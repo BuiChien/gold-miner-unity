@@ -10,8 +10,9 @@ public class GoodsController : GameScript, IVictim {
     public const int EXPLODE = 5;
   }
   public GoodsSo character_;
+  private int score_amount_;
   public int ScoreAmount {
-    get => character_.ScoreAmount; 
+    get => score_amount_; 
   }
 
   public int Id => (int)character_.Type;
@@ -31,6 +32,11 @@ public class GoodsController : GameScript, IVictim {
       if(!string.IsNullOrEmpty(character_.Tag)) {
         gameObject.tag = character_.Tag;
       }
+      if(character_.MaxAmount > character_.ScoreAmount) {
+        score_amount_ = Random.Range(character_.ScoreAmount, character_.MaxAmount);
+      } else {
+        score_amount_ = character_.ScoreAmount;
+      }
     }
   }
 
@@ -44,21 +50,24 @@ public class GoodsController : GameScript, IVictim {
 
   void Start() {
     RegisterGameEventController();
+    SetAnimation(GoodState.IDLE);
     StartCoroutine(DoAnimation());
   }
 
   IEnumerator DoAnimation() {
-    if(state_ != GoodState.EXPLODE) {
-      SetAnimation(GoodState.IDLE);
-      yield return new WaitForSeconds(Random.Range(1, 3));
-      SetAnimation(GoodState.RUN_OR_BLINK);
-      yield return new WaitForSeconds(Random.Range(2, 5));
-      StartCoroutine(DoAnimation());
-    } else {
-      yield return new WaitForSeconds(0.8f);
-      Destroy(gameObject);
-      yield return null;
+    while(true) {
+      if(state_ == GoodState.EXPLODE) {
+        yield return new WaitForSeconds(0.5f);
+        break;
+      } else if(state_ == GoodState.IDLE) {
+        SetAnimation(GoodState.RUN_OR_BLINK);
+        yield return new WaitForSeconds(Random.Range(1, 3));
+      } else if(state_ == GoodState.RUN_OR_BLINK) {
+        SetAnimation(GoodState.IDLE);
+        yield return new WaitForSeconds(Random.Range(2, 5));
+      }
     }
+    Destroy(gameObject);
   }
 
   private void OnTriggerEnter2D(Collider2D collision) {
