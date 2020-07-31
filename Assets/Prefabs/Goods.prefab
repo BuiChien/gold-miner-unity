@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5409179638853680892}
   - component: {fileID: 5409179638853680894}
   - component: {fileID: 5409179638853680895}
-  - component: {fileID: 5409179638853680881}
   - component: {fileID: 6226896427652569571}
   m_Layer: 8
   m_Name: Goods
@@ -136,22 +135,6 @@ PolygonCollider2D:
       - {x: -0.5877852, y: -0.80901706}
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
---- !u!114 &5409179638853680881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5409179638853680890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8adfddd0ffef9264ab1cb31e39cb6119, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  character_: {fileID: 0}
 --- !u!95 &6226896427652569571
 Animator:
   serializedVersion: 3
@@ -162,7 +145,7 @@ Animator:
   m_GameObject: {fileID: 5409179638853680890}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a2eab6671e1f7c04c9702841117eade8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 907da04296dbda04ea95c91b4e9129b8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -21,8 +21,8 @@ public class GoodsController : GameScript, IVictim {
   public bool IsHeavy {
     get => character_.IsHeavy;
   }
-  private PolygonCollider2D collider_;
-  private Animator animator_;
+  protected PolygonCollider2D collider_;
+  protected Animator animator_;
   public GoodsSo Character {
     set {
       character_ = value;
@@ -48,13 +48,13 @@ public class GoodsController : GameScript, IVictim {
     animator_ = GetComponent<Animator>();
   }
 
-  void Start() {
+  protected virtual void Start() {
     RegisterGameEventController();
     SetAnimation(GoodState.IDLE);
     StartCoroutine(DoAnimation());
   }
 
-  IEnumerator DoAnimation() {
+  protected virtual IEnumerator DoAnimation() {
     while(true) {
       if(state_ == GoodState.EXPLODE) {
         yield return new WaitForSeconds(0.5f);
@@ -70,7 +70,7 @@ public class GoodsController : GameScript, IVictim {
     Destroy(gameObject);
   }
 
-  private void OnTriggerEnter2D(Collider2D collision) {
+  protected virtual void OnTriggerEnter2D(Collider2D collision) {
     GameObject gameObject = collision.gameObject;
     IAttacker attacker = gameObject.GetComponent<IAttacker>();
     if (attacker != null) {
@@ -100,7 +100,7 @@ public class GoodsController : GameScript, IVictim {
                                         transform.position.z);
   }
 
-  private void SetAnimation(int state) {
+  protected void SetAnimation(int state) {
     state_ = state;
     if (animator_.runtimeAnimatorController != null) {
       animator_.SetInteger("State", state);

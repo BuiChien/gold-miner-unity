@@ -8,6 +8,8 @@ public class Spawner : MonoBehaviour, ISpawner {
   [SerializeField]
   private GoodsSo[] precious_goods_list_;
   [SerializeField]
+  private GoodsSo[] monster_list_;
+  [SerializeField]
   private GameObject goods_prefab_;
   [SerializeField]
   private SpawnZone precious_material_zone_;
@@ -35,7 +37,8 @@ public class Spawner : MonoBehaviour, ISpawner {
     total_score_ = totalScore;
     level_ = level;
     SpawnPreciousZone();
-    SpawnCommonZone();
+    //SpawnCommonZone();
+    SpawnMonster();
   }
 
   private void UpdateMaxMin(GoodsSo[] listGoods, ref int max, ref int min) {
@@ -62,6 +65,7 @@ public class Spawner : MonoBehaviour, ISpawner {
     GameObject spawnObj;
     Vector3 spawnPoint;
     GoodsSo spawnCharacter;
+    GoodsController controller;
     float radius;
     for (int i = 0; i < spawnNumber; i++) {
       indexSpawn = Random.Range(0, precious_goods_list_.Length);
@@ -72,8 +76,9 @@ public class Spawner : MonoBehaviour, ISpawner {
         continue;
       }
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, precious_material_zone_.transform);
-      spawnObj.GetComponent<GoodsController>().Spawner = this;
-      spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
+      controller = spawnObj.AddComponent<GoodsController>();
+      controller.Spawner = this;
+      controller.Character = spawnCharacter;
       spawnObj.GetComponent<Animator>().runtimeAnimatorController = animator_factory_.Create(spawnObj.tag);
       list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;
@@ -86,6 +91,7 @@ public class Spawner : MonoBehaviour, ISpawner {
     float radius;
     Vector3 spawnPoint;
     GameObject spawnObj;
+    GoodsController controller;
     while (total_score_ > 0) {
       indexSpawn = Random.Range(0, common_goods_list_.Length);
       spawnCharacter = common_goods_list_[indexSpawn];
@@ -95,8 +101,34 @@ public class Spawner : MonoBehaviour, ISpawner {
         continue;
       }
       spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
-      spawnObj.GetComponent<GoodsController>().Character = spawnCharacter;
-      spawnObj.GetComponent<GoodsController>().Spawner = this;
+      controller = spawnObj.AddComponent<GoodsController>();
+      controller.Spawner = this;
+      controller.Character = spawnCharacter;
+      spawnObj.GetComponent<Animator>().runtimeAnimatorController = animator_factory_.Create(spawnObj.tag);
+      list_spawnable_.Add(spawnObj);
+      total_score_ -= spawnCharacter.ScoreAmount;
+    }
+  }
+
+  private void SpawnMonster() {
+    int indexSpawn;
+    GoodsSo spawnCharacter;
+    float radius;
+    Vector3 spawnPoint;
+    GameObject spawnObj;
+    GoodsController controller;
+    while (total_score_ > 0) {
+      indexSpawn = Random.Range(0, monster_list_.Length);
+      spawnCharacter = monster_list_[indexSpawn];
+      radius = spawnCharacter.Icon.bounds.extents.magnitude * spawnCharacter.Scale;
+      spawnPoint = whole_level_zone_.SpawnPoint(radius);
+      if (spawnPoint.Equals(Vector3.zero)) {
+        continue;
+      }
+      spawnObj = Instantiate(goods_prefab_, spawnPoint, Quaternion.identity, whole_level_zone_.transform);
+      controller = spawnObj.AddComponent<MonsterController>();
+      controller.Spawner = this;
+      controller.Character = spawnCharacter;
       spawnObj.GetComponent<Animator>().runtimeAnimatorController = animator_factory_.Create(spawnObj.tag);
       list_spawnable_.Add(spawnObj);
       total_score_ -= spawnCharacter.ScoreAmount;

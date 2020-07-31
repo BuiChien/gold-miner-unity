@@ -1722,6 +1722,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 80dba2207dbb86748bd6564685002027, type: 2}
   - {fileID: 11400000, guid: 8e2d12c2c80c23044b931419600d7746, type: 2}
   - {fileID: 11400000, guid: 1ac8bd18014e44c4982fc978b495a2df, type: 2}
+  monster_list_:
+  - {fileID: 11400000, guid: 271b6de7366c0e54b98a7c6d4390dc1d, type: 2}
+  - {fileID: 11400000, guid: 2db2a4d71fbce4a4091235bfee1ee247, type: 2}
   goods_prefab_: {fileID: 5409179638853680890, guid: c395ab80eaeeeb64fba10e1d315d2868,
     type: 3}
   precious_material_zone_: {fileID: 65298372}
