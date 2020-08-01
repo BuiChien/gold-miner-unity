@@ -7,10 +7,12 @@ public class SoundManager : Singleton<SoundManager> {
   AudioSource clip_player_;
   Dictionary<string, AudioSource> clip_repeat_players_;
   private Document document_;
+  private List<string> repeat_pause_list_;
   void Awake() {
     background_player_ = gameObject.AddComponent<AudioSource>();
     clip_player_ = gameObject.AddComponent<AudioSource>();
     clip_repeat_players_ = new Dictionary<string, AudioSource>();
+    repeat_pause_list_ = new List<string>();
     document_ = Document.Instance;
   }
 
@@ -32,7 +34,7 @@ public class SoundManager : Singleton<SoundManager> {
 
   public void ResumeBackground() {
     if(!background_player_.isPlaying) {
-      background_player_.Play();
+      background_player_.UnPause();
     }
   }
 
@@ -55,8 +57,8 @@ public class SoundManager : Singleton<SoundManager> {
   }
 
   public void ResumeClip() {
-    if (clip_player_.isPlaying) {
-      clip_player_.Play();
+    if (!clip_player_.isPlaying) {
+      clip_player_.UnPause();
     }
   }
 
@@ -70,6 +72,9 @@ public class SoundManager : Singleton<SoundManager> {
       clip_repeat_players_.Add(clip.name, audio);
     } else {
       if(!clip_repeat_players_[clip.name].isPlaying) {
+        if(repeat_pause_list_.Contains(clip.name)) {
+          repeat_pause_list_.Remove(clip.name);
+        }
         clip_repeat_players_[clip.name].Play();
       }
     }
@@ -81,12 +86,31 @@ public class SoundManager : Singleton<SoundManager> {
     }
   }
 
+  public void PauseAllRepeatClip() {
+    foreach (var audio in clip_repeat_players_) {
+      if(audio.Value.isPlaying) {
+        audio.Value.Pause();
+        repeat_pause_list_.Add(audio.Key);
+      }
+    }
+  }
+
+  public void ResumeAllRepeatClip() {
+    foreach (var audio in clip_repeat_players_) {
+      if(repeat_pause_list_.Contains(audio.Key)) {
+        audio.Value.UnPause();
+        repeat_pause_list_.Remove(audio.Key);
+      }
+    }
+  }
+
   public void StopAllRepeatClip() {
     foreach(var audio in clip_repeat_players_) {
       audio.Value.Stop();
       Destroy(audio.Value);
     }
     clip_repeat_players_.Clear();
+    repeat_pause_list_.Clear();
   }
 
   public void StopClip() {

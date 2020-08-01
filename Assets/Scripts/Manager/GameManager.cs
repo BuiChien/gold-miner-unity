@@ -20,11 +20,13 @@ public class GameManager : Singleton<GameManager> {
   [SerializeField]
   private AudioClip button_click_clip_ = null;
   private Document document_;
+  private SoundManager sound_manager_;
   #endregion
 
   #region UnityFuncs
   private void Awake() {
     document_ = Document.Instance;
+    sound_manager_ = SoundManager.Instance;
   }
 
   void Start() {
@@ -55,19 +57,23 @@ public class GameManager : Singleton<GameManager> {
 
   #region ProcessExternalEvent
   private void OnGameEventHandler(GameEventArgs gameEvent) {
-    switch(gameEvent.Name) {
+    if(gameEvent.IsButtonClick) {
+      SoundManager.Instance.PlayClip(button_click_clip_);
+    }
+    switch (gameEvent.Name) {
       case EventNames.LOAD_SCENE:
         LoadScene((LoadSceneEventArgs)gameEvent);
         UpdateState(GameState.RUNNING);
         break;
-      case EventNames.BUTTON_CLICK: {
-          SoundManager.Instance.PlayClip(button_click_clip_);
+      case EventNames.RESUME:
+        if(current_state_ == GameState.PAUSED) {
+          TogglePause();
         }
         break;
-      case EventNames.RESUME:
-        TogglePause();
-        break;
       case EventNames.SHOW_MENU:
+        Time.timeScale = 1.0f;
+        sound_manager_.StopAllRepeatClip();
+        sound_manager_.StopClip();
         UnloadAll();
         break;
       case EventNames.QUIT:
@@ -126,8 +132,10 @@ public class GameManager : Singleton<GameManager> {
         break;
       case GameState.RUNNING:
         //TODO: Audio restart
+        Time.timeScale = 1.0f;
         break;
       case GameState.PAUSED:
+        Time.timeScale = 0.0f;
         //TODO: Audio stop
         break;
       default:

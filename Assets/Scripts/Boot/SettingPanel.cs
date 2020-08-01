@@ -68,9 +68,8 @@ public class SettingPanel : GameScript {
       sound_enable_ = !sound_enable_;
     });
     btn_close_.onClick.AddListener(() => {
-      BroadcastEvent(new ButtonEventArgs(""));
       Visible = false;
-      NotifyEvent(new GameEventArgs("CloseSetting"));
+      NotifyEvent(new ButtonEventArgs("CloseSetting"));
     });
   }
 }

@@ -12,6 +12,7 @@ public class MainMenu : GameScript {
   [SerializeField]
   private SettingPanel setting_panel_;
 
+
   void Start() {
     RegisterGameEventController();
     NewGameButton.onClick.AddListener(OnButtonNewGameClick);

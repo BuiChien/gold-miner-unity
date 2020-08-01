@@ -61,10 +61,6 @@ public class UiManager : Singleton<UiManager> {
   #endregion
   private void OnGameEventHandler(GameEventArgs gameEvent) {
     switch (gameEvent.Name) {
-      case EventNames.BUTTON_CLICK: {
-          OnButtonEventHandler((ButtonEventArgs)gameEvent);
-        }
-        break;
       case EventNames.STARTUP_SUCCESS:
       case EventNames.SHOW_MENU:
         active_startup_ = false;
@@ -76,23 +72,6 @@ public class UiManager : Singleton<UiManager> {
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
         break;
-    }
-  }
-
-  private void OnGameStateChanged(StateChangedEventArgs args) {
-    switch ((GameState)args.NextState) {
-      case GameState.PAUSED:
-        active_pause_menu_ = true;
-        break;
-      default:
-        active_main_menu_ = false;
-        active_pause_menu_ = false;
-        break;
-    }
-  }
-
-  private void OnButtonEventHandler(ButtonEventArgs buttonEvent) {
-    switch (buttonEvent.ButtonName) {
       case EventNames.NEWGAME: {
           active_main_menu_ = false;
           background_.SetActive(false);
@@ -108,6 +87,18 @@ public class UiManager : Singleton<UiManager> {
           SoundManager.Instance.StopBackground();
           NotifyEvent(new LoadSceneEventArgs(SceneNames.MAIN));
         }
+        break;
+    }
+  }
+
+  private void OnGameStateChanged(StateChangedEventArgs args) {
+    switch ((GameState)args.NextState) {
+      case GameState.PAUSED:
+        active_pause_menu_ = true;
+        break;
+      default:
+        active_main_menu_ = false;
+        active_pause_menu_ = false;
         break;
     }
   }

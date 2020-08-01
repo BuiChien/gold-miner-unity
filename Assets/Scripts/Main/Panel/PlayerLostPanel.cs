@@ -32,10 +32,10 @@ public class PlayerLostPanel : MonoBehaviour {
   }
 
   private void OnRetryPlayLevel() {
-    GameEventController.Instance.NotifyEvent(new GameEventArgs(EventNames.RETRY_LEVEL));
+    GameEventController.Instance.NotifyEvent(new ButtonEventArgs(EventNames.RETRY_LEVEL));
   }
 
   private void OnGotoMenu() {
-    GameEventController.Instance.NotifyEvent(new GameEventArgs(EventNames.SHOW_MENU));
+    GameEventController.Instance.NotifyEvent(new ButtonEventArgs(EventNames.SHOW_MENU));
   }
 }

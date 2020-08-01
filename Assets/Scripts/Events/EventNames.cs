@@ -2,7 +2,6 @@
   // Common event
   public const string PLAY_AUDIO = "PlayAudio";
   public const string STATE_CHANGED         = "StateChanged";
-  public const string BUTTON_CLICK          = "ButtonClick";
   public const string LOAD_SCENE            = "LoadScene";
 
   // Control event
@@ -19,4 +18,8 @@
   public const string SHOW_MENU             = "ShowMenu";
   public const string RETRY_LEVEL           = "RetryLevel";
   public const string USE_ITEM_PICKUP       = "UseItemPickup";
+
+  public const string MUSIC_SETTING_CHANGED = "MusicSettingChanged";
+  public const string SOUND_SETTING_CHANGED = "SoundSettingChanged";
+  public const string LANGUAGE_SETTING_CHANGED = "LanguageSettingChanged";
 }

@@ -129,18 +129,10 @@ public class GameController : MonoBehaviour {
       case EventNames.STATE_CHANGED:
         OnGameStateChanged((StateChangedEventArgs)gameEvent);
         break;
-      case EventNames.BUTTON_CLICK:
-        OnButtonEventHandler((ButtonEventArgs)gameEvent);
+      case EventNames.USE_ITEM_PICKUP:
+        OnUseItemPickupHandler((UseItemPickupEventArgs)gameEvent);
         break;
       default:
-        break;
-    }
-  }
-
-  private void OnButtonEventHandler(ButtonEventArgs buttonEvent) {
-    switch (buttonEvent.ButtonName) {
-      case EventNames.USE_ITEM_PICKUP:
-        OnUseItemPickupHandler((UseItemPickupEventArgs)buttonEvent);
         break;
     }
   }
@@ -190,11 +182,13 @@ public class GameController : MonoBehaviour {
   private void OnGameStateChanged(StateChangedEventArgs gameEvent) {
     switch ((GameState)gameEvent.NextState) {
       case GameState.RUNNING:
-        Time.timeScale = 1.0f;
+        sound_manager_.ResumeClip();
+        sound_manager_.ResumeAllRepeatClip();
         document_.ResumeLevel();
         break;
       case GameState.PAUSED:
-        Time.timeScale = 0.0f;
+        sound_manager_.PauseClip();
+        sound_manager_.PauseAllRepeatClip();
         document_.PauseLevel();
         break;
       default:
