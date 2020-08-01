@@ -77,15 +77,16 @@ public class Document : Singleton<Document> {
   }
 
   public void Init() {
-    LoadSetting(user_settings_);
-    LoadSetting(operation_data_);
+    user_settings_.name = "UserSettings";
+    operation_data_.name = "OperationSettings";
+    LoadSetting(user_settings_, user_settings_.name);
+    LoadSetting(operation_data_, operation_data_.name);
     bought_item_dict_ = new Dictionary<ItemPickupType, BoughtItem>();
     TotalScore = operation_data_.TotalScore;
     LoadBomb();
   }
 
   public void GoNextLevel() {
-    operation_data_.Level++;
     if(bought_item_dict_.ContainsKey(ItemPickupType.CLOCK)) {
       TotalTime = (int)((Random.Range(0, Level) / Level) * 20) + 70;
     } else {
@@ -135,6 +136,7 @@ public class Document : Singleton<Document> {
   }
 
   public void FinishLevel() {
+    operation_data_.Level++;
     operation_data_.TotalScore = TotalScore;
     SaveData();
   }
@@ -206,20 +208,20 @@ public class Document : Singleton<Document> {
   }
 
   public void SaveData() {
-    SaveSetting(user_settings_);
-    SaveSetting(operation_data_);
+    SaveSetting(user_settings_, user_settings_.name);
+    SaveSetting(operation_data_, operation_data_.name);
   }
 
-  private void LoadSetting<T>(T instance) {
-    string settingData = PlayerPrefs.GetString(typeof(T).Name, string.Empty);
+  private void LoadSetting<T>(T instance, string key) {
+    string settingData = PlayerPrefs.GetString(key, string.Empty);
     if (settingData != string.Empty) {
       JsonUtility.FromJsonOverwrite(settingData, instance);
     }
   }
 
-  private void SaveSetting<T>(T instance) {
+  private void SaveSetting<T>(T instance, string key) {
     string settingData = JsonUtility.ToJson(instance);
-    PlayerPrefs.SetString(instance.ToString(), settingData);
+    PlayerPrefs.SetString(key, settingData);
     PlayerPrefs.Save();
   }
 
