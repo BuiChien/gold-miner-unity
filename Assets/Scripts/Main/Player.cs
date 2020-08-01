@@ -47,7 +47,6 @@ public class Player : GameScript {
       rod_.PullHook();
     }, (e) => {
       if(rod_.IsIdle) {
-        OnChangeState(PlayerState.HAPPY);
         NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
       }
     });
@@ -55,7 +54,6 @@ public class Player : GameScript {
       rod_.PullHook();
     }, (e) => {
       if (rod_.IsIdle) {
-        OnChangeState(PlayerState.ANGRY);
         NotifyEvent(new GameEventArgs(EventNames.PULL_SUCCESS));
       }
     });
@@ -117,23 +115,17 @@ public class Player : GameScript {
   }
 
   public void Angry() {
-    if (state_machine_.StateId == PlayerState.PULL_HEAVY) {
-      OnChangeState(PlayerState.ANGRY);
-    }
+    OnChangeState(PlayerState.ANGRY);
   }
 
   public void Happy() {
-    if (state_machine_.StateId == PlayerState.PULL) {
-      OnChangeState(PlayerState.HAPPY);
-    }
+    OnChangeState(PlayerState.HAPPY);
   }
 
   private IEnumerator OnAnimationHandler() {
-    yield return new WaitForSeconds(1f);
+    yield return new WaitForSeconds(0.5f);
     switch (state_machine_.StateId) {
       case PlayerState.HAPPY:
-        OnChangeState(PlayerState.IDLE);
-        break;
       case PlayerState.ANGRY:
         OnChangeState(PlayerState.IDLE);
         break;

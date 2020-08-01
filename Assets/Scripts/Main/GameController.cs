@@ -172,12 +172,15 @@ public class GameController : MonoBehaviour {
     switch (document_.AmountType) {
       case ScoreAmountType.LOW:
         clip = catch_victim_low_score_audio_;
+        player_.Angry();
         break;
       case ScoreAmountType.NORMAL:
         clip = catch_victim_normal_score_audio_;
+        player_.Happy();
         break;
       default:
         clip = catch_victim_high_score_audio_;
+        player_.Happy();
         break;
     }
     sound_manager_.StopRepeatClip(pulling_audio_);
