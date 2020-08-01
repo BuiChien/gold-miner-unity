@@ -23,7 +23,7 @@ public class SoundManager : Singleton<SoundManager> {
     background_player_.clip = clip;
     background_player_.loop = true;
     background_player_.volume = 0.5f;
-    if (document_.UserSettingsInfo.MusicEnable) {
+    if (document_.MusicEnable) {
       background_player_.Play();
     }
   }

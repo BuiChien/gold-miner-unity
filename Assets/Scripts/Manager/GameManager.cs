@@ -57,7 +57,7 @@ public class GameManager : Singleton<GameManager> {
 
   #region ProcessExternalEvent
   private void OnGameEventHandler(GameEventArgs gameEvent) {
-    if(gameEvent.IsButtonClick) {
+    if(gameEvent.IsButtonClick && document_.SoundEnable) {
       SoundManager.Instance.PlayClip(button_click_clip_);
     }
     switch (gameEvent.Name) {

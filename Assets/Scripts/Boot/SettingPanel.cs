@@ -32,17 +32,17 @@ public class SettingPanel : GameScript {
   }
 
   private bool music_enable_ {
-    get => document_.UserSettingsInfo.MusicEnable;
+    get => document_.MusicEnable;
     set {
-      document_.UserSettingsInfo.MusicEnable = value;
+      document_.MusicEnable = value;
       btn_music_.image.sprite = value ? music_enable_image_ : music_disable_image_;
     }
   }
 
   private bool sound_enable_ {
-    get => document_.UserSettingsInfo.SoundEnable;
+    get => document_.SoundEnable;
     set {
-      document_.UserSettingsInfo.SoundEnable = value;
+      document_.SoundEnable = value;
       btn_sound_.image.sprite = value ? sound_enable_image_ : sound_disable_image_;
     }
   }
@@ -52,8 +52,8 @@ public class SettingPanel : GameScript {
     document_ = Document.Instance;
     RegisterGameEventController();
     animator_ = GetComponent<Animator>();
-    music_enable_ = document_.UserSettingsInfo.MusicEnable;
-    sound_enable_ = document_.UserSettingsInfo.SoundEnable;
+    music_enable_ = document_.MusicEnable;
+    sound_enable_ = document_.SoundEnable;
     btn_music_.onClick.AddListener(() => {
       BroadcastEvent(new ButtonEventArgs(""));
       music_enable_ = !music_enable_;

@@ -24,17 +24,17 @@ public class PauseMenu : GameScript {
   private Sprite language_vi_image_;
   private Document document_;
   private bool music_enable_ {
-    get => document_.UserSettingsInfo.MusicEnable;
+    get => document_.MusicEnable;
     set {
-      document_.UserSettingsInfo.MusicEnable = value;
+      document_.MusicEnable = value;
       MusicButton.image.sprite = value ? music_enable_image_ : music_disable_image_;
     }
   }
 
   private bool sound_enable_ {
-    get => document_.UserSettingsInfo.SoundEnable;
+    get => document_.SoundEnable;
     set {
-      document_.UserSettingsInfo.SoundEnable = value;
+      document_.SoundEnable = value;
       SoundButton.image.sprite = value ? sound_enable_image_ : sound_disable_image_;
     }
   }
@@ -42,8 +42,8 @@ public class PauseMenu : GameScript {
   void Awake() {
     RegisterGameEventController();
     document_ = Document.Instance;
-    music_enable_ = document_.UserSettingsInfo.MusicEnable;
-    sound_enable_ = document_.UserSettingsInfo.SoundEnable;
+    music_enable_ = document_.MusicEnable;
+    sound_enable_ = document_.SoundEnable;
     ResumeButton.onClick.AddListener(() => {
       BroadcastEvent(new ButtonEventArgs(EventNames.RESUME));
     });

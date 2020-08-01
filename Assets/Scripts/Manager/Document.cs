@@ -35,7 +35,7 @@ public class Document : Singleton<Document> {
 
   #region PublicFields
   public List<ItemPickupSo> PickupSos;
-  public UserSettings UserSettingsInfo { get => user_settings_; }
+  //public UserSettings UserSettingsInfo { get => user_settings_; }
   public int Level {
     get => operation_data_.Level;
   }
@@ -58,6 +58,23 @@ public class Document : Singleton<Document> {
   public int Counter {
     get => (int)timer_.Counter;
   }
+
+  public bool MusicEnable {
+    get => user_settings_.MusicEnable;
+    set {
+      user_settings_.MusicEnable = value;
+      SaveData();
+    }
+  }
+
+  public bool SoundEnable {
+    get => user_settings_.SoundEnable;
+    set {
+      user_settings_.SoundEnable = value;
+      SaveData();
+    }
+  }
+
 
   public List<BoughtItem> BuyItems {
     get {
