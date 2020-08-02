@@ -34,8 +34,9 @@ public class Document : Singleton<Document> {
   #endregion
 
   #region PublicFields
+  public const int HOOK_SPEED_NORMAL      = 3;
+  public const int HOOK_SPEED_WITH_POWER  = 5;
   public List<ItemPickupSo> PickupSos;
-  //public UserSettings UserSettingsInfo { get => user_settings_; }
   public int Level {
     get => operation_data_.Level;
   }
@@ -44,8 +45,8 @@ public class Document : Singleton<Document> {
 
   public int LevelScore { get; private set; }
 
-  public int HookSpeed { get; private set; }
-  public int HookHeavySpeed { get => HookSpeed / 2; }
+  public float HookSpeed { get; private set; }
+  public float HookHeavySpeed { get => HookSpeed / 2; }
   public int TotalScore { get; private set; }
   public int ScoreAmount { get; private set; }
   public ScoreAmountType AmountType { get; private set; }
@@ -63,7 +64,7 @@ public class Document : Singleton<Document> {
     get => user_settings_.MusicEnable;
     set {
       user_settings_.MusicEnable = value;
-      SaveData();
+      SaveUserSettings();
     }
   }
 
@@ -71,7 +72,7 @@ public class Document : Singleton<Document> {
     get => user_settings_.SoundEnable;
     set {
       user_settings_.SoundEnable = value;
-      SaveData();
+      SaveUserSettings();
     }
   }
 
@@ -110,13 +111,13 @@ public class Document : Singleton<Document> {
       TotalTime = 60;
     }
     if (bought_item_dict_.ContainsKey(ItemPickupType.POWER)) {
-      HookSpeed = 5;
+      HookSpeed = HOOK_SPEED_WITH_POWER;
     } else {
-      HookSpeed = 3;
+      HookSpeed = HOOK_SPEED_NORMAL;
     }
     int oldTargetScore = TagetScore;
     TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
-    LevelScore = (TagetScore - oldTargetScore) + Random.Range(800, 2000);
+    LevelScore = (TagetScore - oldTargetScore) + Random.Range(200, 800);
     TotalScore = operation_data_.TotalScore;
     timer_.StartTime = TotalTime;
     timer_.Restart();
@@ -126,11 +127,11 @@ public class Document : Singleton<Document> {
     operation_data_.IsFirstTime = false;
     operation_data_.Level = 1;
     TotalTime = 61;
-    HookSpeed = 3;
+    HookSpeed = HOOK_SPEED_NORMAL;
     TagetScore = 800;
     operation_data_.TotalScore = 0;
     TotalScore = 0;
-    LevelScore = TagetScore + Random.Range(800, 2000);
+    LevelScore = TagetScore + Random.Range(800, 1500);
     timer_.StartTime = TotalTime;
     SaveData();
   }
@@ -153,9 +154,11 @@ public class Document : Singleton<Document> {
   }
 
   public void FinishLevel() {
-    operation_data_.Level++;
-    operation_data_.TotalScore = TotalScore;
-    SaveData();
+    if(IsVictory) {
+      operation_data_.Level++;
+      operation_data_.TotalScore = TotalScore;
+      SaveData();
+    }
   }
 
   public void SetScoreAmount(IVictim victim) {
@@ -203,6 +206,10 @@ public class Document : Singleton<Document> {
       && bought_item_dict_[item.Type].Count > 0) {
       bought_item_dict_[item.Type].Count--;
     }
+    if(item.Type.Equals(ItemPickupType.BOMB)) {
+      operation_data_.BombCount = bought_item_dict_[item.Type].Count;
+      SaveOperationData();
+    }
   }
 
   public void BuyPickupItem(ItemPickupSo item, int amount, int count = 1) {
@@ -212,7 +219,10 @@ public class Document : Singleton<Document> {
       bought_item_dict_.Add(item.Type, new BoughtItem(item, count));
     }
     TotalScore -= amount;
-    SaveData();
+    if (item.Type.Equals(ItemPickupType.BOMB)) {
+      operation_data_.BombCount = bought_item_dict_[item.Type].Count;
+      SaveOperationData();
+    }
   }
 
   public void Clear() {
@@ -225,7 +235,15 @@ public class Document : Singleton<Document> {
   }
 
   public void SaveData() {
+    SaveUserSettings();
+    SaveOperationData();
+  }
+
+  private void SaveUserSettings() {
     SaveSetting(user_settings_, user_settings_.name);
+  }
+
+  private void SaveOperationData() {
     SaveSetting(operation_data_, operation_data_.name);
   }
 

@@ -30,11 +30,17 @@ public class InventoryItem : GameScript {
     button_ = GetComponent<Button>();
     button_.onClick.AddListener(() => {
       if(CanUse) {
-        if(Count <= 0) {
-          button_.interactable = false;
-        }
+        Count--;
+        button_.interactable = false;
+        StartCoroutine(ReEnable());
         NotifyEvent(new UseItemPickupEventArgs(item_));
       }
     });
+  }
+
+  IEnumerator ReEnable() {
+    yield return new WaitForSeconds(0.8f);
+    button_.interactable = !(Count <= 0);
+    yield return null;
   }
 }

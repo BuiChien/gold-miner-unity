@@ -57,7 +57,7 @@ public class GoodsController : GameScript, IVictim {
   protected virtual IEnumerator DoAnimation() {
     while(true) {
       if(state_ == GoodState.EXPLODE) {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.15f);
         break;
       } else if(state_ == GoodState.IDLE) {
         SetAnimation(GoodState.RUN_OR_BLINK);

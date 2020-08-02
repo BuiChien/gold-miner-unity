@@ -38,6 +38,7 @@ public class Hook : MonoBehaviour, IAttacker {
       hook_.SetActive(true);
       half_hook_.SetActive(false);
       original_position_ = transform.localPosition;
+      GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }, (e) => {
       //Do nothing
     });

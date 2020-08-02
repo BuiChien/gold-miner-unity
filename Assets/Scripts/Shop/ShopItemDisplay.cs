@@ -35,9 +35,12 @@ public class ShopItemDisplay : GameScript {
   private Button btn_buy_;
   [SerializeField]
   private Button btn_ads_;
+  [SerializeField]
+  private TMP_Text txt_free_;
 
   void Start() {
     btn_ads_.gameObject.SetActive(UnityEngine.Random.Range(0, 2) > 0 ? true : false);
+    txt_free_.gameObject.SetActive(btn_ads_.gameObject.activeSelf);
     btn_buy_.onClick.AddListener(() => {
       btn_buy_.interactable = false;
       btn_ads_.interactable = !pickup_item_.Character.IsOnlyOneLevel;

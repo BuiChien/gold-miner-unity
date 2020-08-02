@@ -39,7 +39,7 @@ public class Bomb : MonoBehaviour, IAttacker {
     while (target_ != null) {
       if(transform.position != endPoint) {
         count += Time.deltaTime;
-        transform.position = Vector3.Lerp(startPoint, endPoint, count * 3);
+        transform.position = Vector3.Lerp(startPoint, endPoint, count * 2);
       } else {
         count = 0;
         if (next_pos < Waypoints.Length - 1) {

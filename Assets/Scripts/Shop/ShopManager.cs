@@ -27,7 +27,7 @@ public class ShopManager : MonoBehaviour {
 
   private int Score {
     set {
-      txt_score_.text = "$ " + value.ToString();
+      txt_score_.text = "$" + value.ToString();
     }
   }
 

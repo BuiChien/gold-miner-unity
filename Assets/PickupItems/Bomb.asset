@@ -19,5 +19,6 @@ MonoBehaviour:
     type: 3}
   MinPrice: 30
   MaxPrice: 100
-  Usage: Test
-  OnlyOneLevel: 0
+  Usage: When you grab heavy items, you can tap on the screen to blow it up. Valid
+    for all time
+  IsOnlyOneLevel: 0

@@ -22,6 +22,7 @@ public class Inventory : GameScript {
       if(i < items.Count) {
         if(items[i].Character.InventoryIcon != null) {
           item_pickup_list_[i].Item = items[i].Character;
+          item_pickup_list_[i].Count = items[i].Count;
           item_pickup_list_[i].GameEvent.AddListener((e) => {
             BroadcastEvent(e);
           });

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f3869c440fe484b8bb0e6999d0126b, type: 3}
   m_Name: Power
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Power
   Type: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 954184257886172556, guid: a4382cd18ccfc5544be07fc895c2ac3f, type: 3}
   InventoryIcon: {fileID: 0}
   MinPrice: 200
   MaxPrice: 600
-  Usage: 
+  Usage: The miner will reel up objects a little faster on the next level. Only works
+    next level
   IsOnlyOneLevel: 1
