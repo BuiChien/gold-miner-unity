@@ -110,6 +110,7 @@ public class GameController : MonoBehaviour {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
           if(attachEvent.Attacker.Name.Equals(Hook.MyName)) {
             inventory_.CanUse = true;
+            //TODO: action for gift
             document_.SetScoreAmount(attachEvent.Victim);
             sound_manager_.PlayRepeatClip(pulling_audio_);
             if (attachEvent.Victim.IsHeavy) {

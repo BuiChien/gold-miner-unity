@@ -22,6 +22,12 @@ public class BoughtItem {
   }
 }
 
+public enum GIFT_BAG_TYPE {
+  POWER,
+  SCORE_FLY,
+  BOOM_FLY
+}
+
 public class Document : Singleton<Document> {
   #region PrivateField
   [SerializeField]
