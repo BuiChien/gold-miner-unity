@@ -43,4 +43,8 @@ public class InventoryItem : GameScript {
     button_.interactable = !(Count <= 0);
     yield return null;
   }
+
+  public void ItemFly() {
+
+  }
 }

@@ -110,7 +110,6 @@ public class GameController : MonoBehaviour {
           AttachEventArgs attachEvent = (AttachEventArgs)gameEvent;
           if(attachEvent.Attacker.Name.Equals(Hook.MyName)) {
             inventory_.CanUse = true;
-            //TODO: action for gift
             document_.SetScoreAmount(attachEvent.Victim);
             sound_manager_.PlayRepeatClip(pulling_audio_);
             if (attachEvent.Victim.IsHeavy) {
@@ -125,6 +124,9 @@ public class GameController : MonoBehaviour {
       case EventNames.PULL_SUCCESS:
         inventory_.CanUse = false;
         OnPullSuccess();
+        if(document_.Gift != GIFT_TYPE.NONE) {
+          DoGift();
+        }
         player_.HookSpeed = document_.HookSpeed;
         break;
       case EventNames.STATE_CHANGED:
@@ -132,6 +134,26 @@ public class GameController : MonoBehaviour {
         break;
       case EventNames.USE_ITEM_PICKUP:
         OnUseItemPickupHandler((UseItemPickupEventArgs)gameEvent);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private void DoGift() {
+    switch (document_.Gift) {
+      case GIFT_TYPE.POWER:
+        ItemPickupSo power = document_.PickupSos.Find(x => x.Type == ItemPickupType.POWER);
+        document_.BuyPickupItem(power, 0);
+        break;
+      case GIFT_TYPE.SCORE_FLY:
+        status_panel_.ScoreFly();
+        break;
+      case GIFT_TYPE.BOOM_FLY: {
+          ItemPickupSo bomb = document_.PickupSos.Find(x => x.Type == ItemPickupType.BOMB);
+          document_.BuyPickupItem(bomb, 0);
+          inventory_.AddDisplayItem(bomb);
+        }
         break;
       default:
         break;
@@ -195,9 +217,5 @@ public class GameController : MonoBehaviour {
       default:
         break;
     }
-  }
-
-  void NotifyEvent(GameEventArgs gameEvent) {
-    game_event_controller_.NotifyEvent(gameEvent);
   }
 }

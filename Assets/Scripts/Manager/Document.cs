@@ -22,10 +22,11 @@ public class BoughtItem {
   }
 }
 
-public enum GIFT_BAG_TYPE {
+public enum GIFT_TYPE {
   POWER,
   SCORE_FLY,
-  BOOM_FLY
+  BOOM_FLY,
+  NONE
 }
 
 public class Document : Singleton<Document> {
@@ -46,15 +47,15 @@ public class Document : Singleton<Document> {
   public int Level {
     get => operation_data_.Level;
   }
-
   public int TagetScore { get; private set; }
-
   public int LevelScore { get; private set; }
-
-  public float HookSpeed { get; private set; }
+  public float HookSpeed {
+    get => bought_item_dict_.ContainsKey(ItemPickupType.POWER) ? HOOK_SPEED_WITH_POWER : HOOK_SPEED_NORMAL;
+  }
   public float HookHeavySpeed { get => HookSpeed / 2; }
   public int TotalScore { get; private set; }
   public int ScoreAmount { get; private set; }
+  public GIFT_TYPE Gift { get; private set; }
   public ScoreAmountType AmountType { get; private set; }
   public int TotalTime { get; private set; }
   public bool IsVictory { get => TotalScore >= TagetScore; }
@@ -81,7 +82,6 @@ public class Document : Singleton<Document> {
       SaveUserSettings();
     }
   }
-
 
   public List<BoughtItem> BuyItems {
     get {
@@ -116,11 +116,6 @@ public class Document : Singleton<Document> {
     } else {
       TotalTime = 60;
     }
-    if (bought_item_dict_.ContainsKey(ItemPickupType.POWER)) {
-      HookSpeed = HOOK_SPEED_WITH_POWER;
-    } else {
-      HookSpeed = HOOK_SPEED_NORMAL;
-    }
     int oldTargetScore = TagetScore;
     TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
     LevelScore = (TagetScore - oldTargetScore) + Random.Range(200, 800);
@@ -133,7 +128,6 @@ public class Document : Singleton<Document> {
     operation_data_.IsFirstTime = false;
     operation_data_.Level = 1;
     TotalTime = 61;
-    HookSpeed = HOOK_SPEED_NORMAL;
     TagetScore = 800;
     operation_data_.TotalScore = 0;
     TotalScore = 0;
@@ -151,7 +145,6 @@ public class Document : Singleton<Document> {
     TotalTime = 61;
     TagetScore = ((Level - 1) * 1200) + 800 + Random.Range(0, Level) * 500;
     LevelScore = (TagetScore - oldTargetScore) + Random.Range(800, 2000);
-    HookSpeed = 3;
     timer_.StartTime = TotalTime;
   }
 
@@ -185,7 +178,16 @@ public class Document : Singleton<Document> {
           ScoreAmount = victim.ScoreAmount;
         }
         break;
+      case "GiftBag": {
+          Gift = (GIFT_TYPE)Random.Range((int)GIFT_TYPE.POWER, (int)GIFT_TYPE.NONE + 1);
+          if(Gift == GIFT_TYPE.SCORE_FLY) {
+            int maxScore = bought_item_dict_.ContainsKey(ItemPickupType.CLOVER) ? 400 : 150;
+            ScoreAmount = Random.Range(50, maxScore);
+          }
+        }
+        break;
       default:
+        Gift = GIFT_TYPE.NONE;
         ScoreAmount = victim.ScoreAmount;
         break;
     }

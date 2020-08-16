@@ -30,4 +30,18 @@ public class Inventory : GameScript {
       }
     }
   }
+
+  public void AddDisplayItem(ItemPickupSo itemSo) {
+    InventoryItem newItem = null;
+    foreach (InventoryItem item in item_pickup_list_) {
+      if(item.Item.Type == itemSo.Type) {
+        newItem = item;
+        break;
+      }
+    }
+    if(newItem == null) {
+      //newItem 
+    }
+    newItem.ItemFly();
+  }
 }

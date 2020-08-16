@@ -35,4 +35,8 @@ public class StatusPanel : MonoBehaviour {
   private TMP_Text txt_target_score_;
   [SerializeField]
   private TMP_Text txt_level_;
+
+  public void ScoreFly() {
+
+  }
 }
